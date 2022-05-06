@@ -11,24 +11,8 @@ services:
 
     env_file:
       - ./.env.prod
-    
-    environment:
-    - IP=127.0.0.1
-  
-  node-1:
-    build: ./services/backend
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
-    volumes:
-      - ./services/backend/:/usr/src/app/
-    expose:
-      - 5000
 
-    env_file:
-      - ./.env.prod
-    
-    environment:
-      - IP=148.251.41.232
-  
+      
   nginx-manager:
     build:
       context: ./services/nginx
