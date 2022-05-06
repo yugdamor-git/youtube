@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  manager:
+  node-0:
     build: ./services/backend
     command: gunicorn --bind 0.0.0.0:5000 manage:app
     volumes:
@@ -27,13 +27,20 @@ services:
       - ./.env.prod
     
     environment:
-      - IP=127.0.0.1
+      - IP=148.251.41.232
   
-  nginx:
-    build: ./services/nginx
+  nginx-manager:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile.manager
+
+    ports:
+      - 1337:80
+  
+  nginx-node:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile.node
     
     ports:
       - 1337:80
-
-    depends_on:
-      - web
