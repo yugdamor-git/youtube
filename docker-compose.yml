@@ -46,8 +46,8 @@ services:
       - ./services/redis/data:/data
   
   amplify:
-    image: "nginx-amplify"
+    image: "nginxinc/amplify-agent"
     environment:
       - API_KEY=540b099db29073cd8ed91f97c0078087
       - AMPLIFY_IMAGENAME=youtube
-
+# docker pull nginxinc/amplify-agent
