@@ -151,7 +151,7 @@ class YoutubeDownloader:
         
         fileName = f'{id}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp4'
         
-        if Path(fileName).exists() == True:
+        if self.mediaDir.joinpath(fileName).exists() == True:
             return {
             "downloadUrl":f'{self.host}{fileName}',
             "downloaded":False
