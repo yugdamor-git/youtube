@@ -37,6 +37,28 @@ def info():
             "data":info
         })
 
+@app.route("/redis",methods=["POST"])
+def redis():
+    
+    data = request.json
+    
+    key = data.get("key",None)
+    
+    if key == None:
+        return jsonify({
+            "status":False,
+            "message":"key is missing...",
+            "data":None
+        })
+    
+    info = yd.redis.get(key)
+    
+    return jsonify({
+            "status":True,
+            "message":"200",
+            "data":info
+        })
+
 
 @app.route("/download",methods=["POST"])
 def download():

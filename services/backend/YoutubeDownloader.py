@@ -143,7 +143,9 @@ class YoutubeDownloader:
     def downloadVideo(self,id,quality):
         
         data = self.redis.get(id)
+        
         url = f'https://www.youtube.com/watch?v={id}'
+        
         if data == None:
             data = self.fetchInfo(url)
         
@@ -151,7 +153,8 @@ class YoutubeDownloader:
         
         if Path(fileName).exists() == True:
             return {
-            "downloadUrl":f'{self.host}{fileName}'
+            "downloadUrl":f'{self.host}{fileName}',
+            "downloaded":False
         }
         
         ydl_opts = {
@@ -168,7 +171,8 @@ class YoutubeDownloader:
         ydl.download(url)
         
         return {
-            "downloadUrl":f'{self.host}{fileName}'
+            "downloadUrl":f'{self.host}{fileName}',
+             "downloaded":True
         }
     
     def downloadAudio(self,id,quality):
