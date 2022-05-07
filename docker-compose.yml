@@ -23,7 +23,7 @@ services:
     
     environment:
       - API_KEY=540b099db29073cd8ed91f97c0078087
-      - AMPLIFY_IMAGENAME=youtube
+      - AMPLIFY_IMAGENAME=youtube-1
 
     ports:
       - 1337:80
