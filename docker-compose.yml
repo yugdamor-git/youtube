@@ -44,3 +44,10 @@ services:
     hostname: redis
     volumes:
       - ./services/redis/data:/data
+  
+  amplify:
+    image: "nginx-amplify"
+    environment:
+      - API_KEY=540b099db29073cd8ed91f97c0078087
+      - AMPLIFY_IMAGENAME=youtube
+
