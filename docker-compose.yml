@@ -1,7 +1,21 @@
 version: '3.8'
 
 services:
-  node:
+  backend-node:
+    build: ./services/backend
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    # expose:
+    #   - 5000
+    ports:
+      - 6001:5000
+
+    env_file:
+      - ./.env.prod
+    
+    volumes:
+      - ./media:/usr/src/app/media
+
+  backend-manager:
     build: ./services/backend
     command: gunicorn --bind 0.0.0.0:5000 manage:app
     # expose:
@@ -43,15 +57,18 @@ services:
     volumes:
       - ./media:/home/app/web/media
 
-  redis:
+  redis-manager:
     image: "redis:alpine"
     hostname: redis
     volumes:
       - ./services/redis/data:/data
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
   
   amplify:
     image: "nginxinc/amplify-agent"
     environment:
       - API_KEY=540b099db29073cd8ed91f97c0078087
       - AMPLIFY_IMAGENAME=youtube
+
+
 # docker pull nginxinc/amplify-agent

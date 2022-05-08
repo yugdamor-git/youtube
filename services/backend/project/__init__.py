@@ -60,23 +60,22 @@ def redis():
         })
 
 
-@app.route("/download",methods=["POST"])
-def download():
+@app.route("/download/<downloadType>/<quality>/<key>",methods=["GET"])
+def download(downloadType,quality,key):
     
-    data = request.json
-    
-    id = data.get("id",None)
-    
-    quality = data.get("quality",None)
-    
-    if id == None or quality == None:
+    if key == None or quality == None or downloadType == None:
         return jsonify({
             "status":False,
-            "message":"id or quality is missing...",
+            "message":"id,key or quality is missing...",
             "data":None
         })
     
-    info = yd.downloadVideo(id,quality)
+    if downloadType == "video":
+        info = yd.downloadVideo(key,quality)
+    elif downloadType == "audio":
+        info = yd.downloadAudio(key,quality)
+    else:
+        info = None
     
     return jsonify({
             "status":True,
@@ -87,6 +86,4 @@ def download():
 
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
-    print(f'folderName : {folderName}')
-    print(f'fileName : {fileName}')
     return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)

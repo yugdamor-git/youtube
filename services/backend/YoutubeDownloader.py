@@ -4,6 +4,7 @@ from slugify import slugify
 from redisHandler import redisHandler
 import math
 import yt_dlp
+import hashlib
 
 class YoutubeDownloader:
     def __init__(self):
@@ -24,6 +25,15 @@ class YoutubeDownloader:
         
     
     def fetchInfo(self,youtubeUrl):
+        
+        key = self.generateHash(youtubeUrl)
+        
+        info = self.redis.get(key)
+        
+        if info != None:
+            info["fromCache"] = True
+            return info
+        
         options = {
             'continue_dl': False,
             'skip_download': True,
@@ -36,6 +46,8 @@ class YoutubeDownloader:
         
         data = {
         'id': info['id'],
+        'key':key,
+        'url':youtubeUrl,
         'title': info["fulltitle"],
         'titleSlug':slugify(info["fulltitle"]),
         "thumbnail": info["thumbnail"],
@@ -44,7 +56,9 @@ class YoutubeDownloader:
         "video_formats":self.extractVideoResolutions(info)
         }
         
-        self.redis.set(data["id"],data)
+        self.redis.set(key,data)
+        
+        data["fromCache"] = False
         
         return data
     
@@ -79,7 +93,10 @@ class YoutubeDownloader:
             }
         else:
             return self.convert_size(int(float(filesize)))
-            
+    def generateHash(self,value):
+        sha1 = hashlib.sha1()
+        sha1.update(str(value).encode("utf-8"))
+        return sha1.hexdigest()
         
     
     def extractVideoResolutions(self,info):
@@ -140,16 +157,11 @@ class YoutubeDownloader:
         
         return dict(sorted(availableBitrates.items(),reverse=True))
     
-    def downloadVideo(self,id,quality):
+    def downloadVideo(self,key,quality):
         
-        data = self.redis.get(id)
+        data = self.redis.get(key)
         
-        url = f'https://www.youtube.com/watch?v={id}'
-        
-        if data == None:
-            data = self.fetchInfo(url)
-        
-        fileName = f'{id}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp4'
+        fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp4'
         
         if self.mediaDir.joinpath(fileName).exists() == True:
             return {
@@ -168,12 +180,44 @@ class YoutubeDownloader:
         
         ydl = yt_dlp.YoutubeDL(ydl_opts)
         
-        ydl.download(url)
+        ydl.download(data["url"])
         
         return {
             "downloadUrl":f'{self.host}{fileName}',
              "downloaded":True
         }
     
-    def downloadAudio(self,id,quality):
-        pass
+    def downloadAudio(self,key,quality):
+        
+        data = self.redis.get(key)
+        
+        fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp3'
+        
+        if self.mediaDir.joinpath(fileName).exists() == True:
+            return {
+            "downloadUrl":f'{self.host}{fileName}',
+            "downloaded":False
+        }
+        
+        ydl_opts = {
+                'format': 'bestaudio',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': str(quality),
+                }],
+                'outtmpl': f'media/%(id)s/ytshorts-savetube-{data["titleSlug"]}-{quality}.%(ext)s',
+                'noplaylist': True,
+                'quiet': True,
+                'verbose': False
+                
+                }
+        
+        ydl = yt_dlp.YoutubeDL(ydl_opts)
+        
+        ydl.download(data["url"])
+        
+        return {
+            "downloadUrl":f'{self.host}{fileName}',
+             "downloaded":True
+        }
