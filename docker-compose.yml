@@ -58,7 +58,7 @@ services:
       - ./media:/home/app/web/media
 
   redis-manager:
-    image: "redis"
+    image: redis:6.2-alpine
     hostname: redis
     volumes:
       - ./services/redis/data:/data
