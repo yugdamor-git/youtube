@@ -71,6 +71,16 @@ services:
     environment:
       - API_KEY=540b099db29073cd8ed91f97c0078087
       - AMPLIFY_IMAGENAME=youtube
+  
+  memcached:
+    container_name: memcached
+    
+    image: memcached:latest
+    
+    restart: always
+    
+    ports:
+        - 11211
 
 
 # docker pull nginxinc/amplify-agent
