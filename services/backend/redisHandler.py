@@ -7,7 +7,7 @@ class redisHandler:
     def __init__(self):
         print("redis handler init")
         
-        host = os.environ.get("REDIS_HOST")
+        host = "redis-manager"
         
         port = 6379
         
@@ -19,8 +19,7 @@ class redisHandler:
         self.redis = redis.Redis(
             host=host,
             port=port,
-            password=password,
-            username="admin"
+            password=password
         )
     
     def set(self,key,value):
