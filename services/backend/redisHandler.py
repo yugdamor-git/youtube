@@ -20,7 +20,7 @@ class redisHandler:
             host=host,
             port=port,
             password=password,
-            username="default"
+            username="admin"
         )
     
     def set(self,key,value):
