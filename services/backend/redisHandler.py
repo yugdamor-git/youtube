@@ -13,14 +13,15 @@ class redisHandler:
         
         password = os.environ.get("REDIS_PASSWORD")
         
+        print(password)
+        
         self.expireAfter = 1 * 5 * 60 * 60
         # 5 hour expire
         
         self.redis = redis.Redis(
             host=host,
             port=port,
-            password=password,
-            db=1
+            password=password
         )
     
     def set(self,key,value):
