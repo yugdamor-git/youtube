@@ -19,7 +19,8 @@ class redisHandler:
         self.redis = redis.Redis(
             host=host,
             port=port,
-            password=password
+            password=password,
+            db=1
         )
     
     def set(self,key,value):
