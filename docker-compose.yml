@@ -23,8 +23,7 @@ services:
     
     ports:
         - "3000:3000"
-    volumes:
-      - ./services/frontend/node_modules:/usr/src/app/node_modules
+    
 
   file-manager:
     build: ./services/file-manager
