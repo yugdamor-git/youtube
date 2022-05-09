@@ -52,7 +52,6 @@ services:
     
     ports:
       - 1337:80
-
     
     volumes:
       - ./media:/home/app/web/media

@@ -7,7 +7,7 @@ class redisHandler:
     def __init__(self):
         print("redis handler init")
         
-        host = "redis-manager"
+        host = os.environ.get("REDIS_HOST")
         
         port = 6379
         
@@ -34,5 +34,12 @@ class redisHandler:
     def get(self,key):
         try:
             return json.loads(self.redis.get(key))
-        except:
+        except Exception as e:
+            print(f'error : {str(e)}')
             return None
+        
+
+if __name__ == "__main__":
+    r = redisHandler()
+    
+    print(r.get("1f245908c31b5743042f8765885eb017013e8496"))
