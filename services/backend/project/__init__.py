@@ -84,7 +84,7 @@ def download(downloadType,quality,key):
         })
 
 
-@app.route("/download/thumbnail",methods=["POST"])
+@app.route("/thumbnail",methods=["POST"])
 def downloadThumbnail():
     
     jsonData = request.json
