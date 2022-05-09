@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from YoutubeDownloader import YoutubeDownloader
 from flask_cors import CORS
+import time
 
 yd = YoutubeDownloader()
 
@@ -95,7 +96,7 @@ def downloadThumbnail():
         })
     
     info = yd.downloadThumbnail(url) 
-    
+    time.sleep(1)
     return jsonify({
             "status":True,
             "message":"200",
