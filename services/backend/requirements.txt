@@ -4,3 +4,4 @@ redis
 python-slugify
 yt-dlp
 requests
+flask-cors
