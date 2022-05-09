@@ -3,3 +3,4 @@ gunicorn
 redis
 python-slugify
 yt-dlp
+requests
