@@ -144,7 +144,7 @@ class YoutubeDownloader:
         except Exception as e:
             print(f'error -> {str(e)}')
         
-        tmp = dict(sorted(availableResolutions.items(),reverse=True))
+        tmp = sorted(availableResolutions.items(),reverse=True)
         
         final = []
         
@@ -174,14 +174,14 @@ class YoutubeDownloader:
         except Exception as e:
             print(f'error -> {str(e)}')
             
-        tmp = dict(sorted(availableBitrates.items(),reverse=True))
+        tmp = sorted(availableBitrates.items(),reverse=True)
         
         final = []
         
         for key in tmp:
             final.append(tmp[key])
         
-        return final
+        return 
     
     def downloadVideo(self,key,quality):
         
