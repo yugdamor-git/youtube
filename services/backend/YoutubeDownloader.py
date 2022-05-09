@@ -237,6 +237,11 @@ class YoutubeDownloader:
         
         thumbnails = []
         
+        folder = self.mediaDir.joinpath(data["id"])
+        
+        if not folder.exists():
+            folder.mkdir()
+        
         for resolution in self.image_resolutions:
             r = requests.get(self.image_resolutions[resolution].format(id=data['id']))
             
@@ -251,8 +256,6 @@ class YoutubeDownloader:
                 })
                 
                 continue
-            
-            filePath.touch()
             
             f = open(filePath, 'wb')
             
