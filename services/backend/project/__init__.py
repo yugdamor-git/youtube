@@ -15,12 +15,10 @@ def hello_world():
         ip=os.environ.get("IP")
     )
     
-@app.route("/info",methods=["POST"])
+@app.route("/info",methods=["GET"])
 def info():
     
-    data = request.json
-    
-    url = data.get("url",None)
+    url = request.args.get("url",None)
     
     if url == None:
         return jsonify({
@@ -37,12 +35,9 @@ def info():
             "data":info
         })
 
-@app.route("/redis",methods=["POST"])
+@app.route("/redis",methods=["GET"])
 def redis():
-    
-    data = request.json
-    
-    key = data.get("key",None)
+    key = request.args.get("key",None)
     
     if key == None:
         return jsonify({
@@ -84,12 +79,10 @@ def download(downloadType,quality,key):
         })
 
 
-@app.route("/download/thumbnail",methods=["POST"])
+@app.route("/download/thumbnail",methods=["GET"])
 def downloadThumbnail():
     
-    jsonData = request.json
-    
-    url = jsonData.get("url")
+    url = request.args.get("url",None)
     
     if url == None:
         return jsonify({
