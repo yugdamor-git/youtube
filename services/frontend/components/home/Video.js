@@ -165,7 +165,6 @@ const Video = ({currentVideoData,contentType}) => {
           <div className="download btn text-left w-40">
             <a
                 href={video}
-                target='_blank'
                 download
                 className="text-white bg-green-600  hover:bg-green-500  rounded-lg p-2 text-center  mb-2 font-[700] flex items-center cursor-pointer"
               >
