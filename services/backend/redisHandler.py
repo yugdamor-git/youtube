@@ -15,7 +15,7 @@ class redisHandler:
         
         print(password)
         
-        self.expireAfter = 1 * 5 * 60 * 60
+        self.expireAfter = 1 * 1 * 60 * 60
         # 5 hour expire
         
         self.redis = redis.Redis(
