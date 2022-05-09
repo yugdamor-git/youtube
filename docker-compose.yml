@@ -15,6 +15,16 @@ services:
     volumes:
       - ./media:/usr/src/app/media
 
+  file-manager:
+    build: ./services/file-manager
+    command: python FileManager.py
+
+    env_file:
+      - ./.env.prod
+    
+    volumes:
+      - ./media:/usr/src/app/media
+
   backend-manager:
     build: ./services/backend
     command: gunicorn --bind 0.0.0.0:5000 manage:app
@@ -34,10 +44,6 @@ services:
     build:
       context: ./services/nginx
       dockerfile: Dockerfile.manager
-    
-    environment:
-      - API_KEY=540b099db29073cd8ed91f97c0078087
-      - AMPLIFY_IMAGENAME=youtube-1
 
     ports:
       - 1337:80

@@ -4,6 +4,7 @@ from slugify import slugify
 from redisHandler import redisHandler
 import math
 import yt_dlp
+import requests
 import hashlib
 
 class YoutubeDownloader:
@@ -17,6 +18,14 @@ class YoutubeDownloader:
         self.host = f'http://{os.environ.get("IP")}:1337/media/'
         
         self.redis = redisHandler()
+        
+        self.image_resolutions = {
+        'HD Image (1280x720)':'https://img.youtube.com/vi/{id}/maxresdefault.jpg',
+        'SD Image (640x480)': 'https://img.youtube.com/vi/{id}/sddefault.jpg',
+        'Normal Image (480x360)': 'https://img.youtube.com/vi/{id}/hqdefault.jpg',
+        'Normal Image (320x180)': 'https://img.youtube.com/vi/{id}/mqdefault.jpg',
+        'Small Image (120x90)': 'https://img.youtube.com/vi/{id}/default.jpg'
+        }
         
         
         
@@ -221,3 +230,38 @@ class YoutubeDownloader:
             "downloadUrl":f'{self.host}{fileName}',
              "downloaded":True
         }
+    
+    def downloadThumbnail(self,youtubeUrl):
+        
+        data = self.fetchInfo(youtubeUrl)
+        
+        thumbnails = []
+        
+        for resolution in self.image_resolutions:
+            r = requests.get(self.image_resolutions[resolution].format(id=data['id']))
+            
+            fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{slugify(resolution)}.jpg'
+            
+            filePath = self.mediaDir.joinpath(fileName)
+            
+            if filePath.exists() == True:
+                thumbnails.append({
+                    "label":resolution,
+                    "downloadUrl":f'{self.host}{fileName}'
+                })
+                
+                continue
+            
+            f = open(filePath, 'wb')
+            
+            for chunk in r.iter_content(chunk_size=512 * 1024): 
+                if chunk: 
+                    f.write(chunk)
+            f.close()
+            
+            thumbnails.append({
+                    "label":resolution,
+                    "downloadUrl":f'{self.host}{fileName}'
+                })
+            
+        return thumbnails

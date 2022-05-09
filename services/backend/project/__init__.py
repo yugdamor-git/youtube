@@ -84,6 +84,29 @@ def download(downloadType,quality,key):
         })
 
 
+@app.route("/download/thumbnail",methods=["POST"])
+def downloadThumbnail():
+    
+    jsonData = request.json
+    
+    url = jsonData.get("url")
+    
+    if url == None:
+        return jsonify({
+            "status":False,
+            "message":"url is missing...",
+            "data":None
+        })
+    
+    info = yd.downloadThumbnail(url) 
+    
+    return jsonify({
+            "status":True,
+            "message":"200",
+            "data":info
+        })
+
+
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
     return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)
