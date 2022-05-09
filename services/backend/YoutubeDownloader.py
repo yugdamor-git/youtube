@@ -112,13 +112,15 @@ class YoutubeDownloader:
     
     def extractVideoResolutions(self,info):
         
+        duration = info["duration"]
+        
         availableResolutions = {}
         
         try:
             directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res['acodec'] != 'none' and res["ext"] =="mp4"]
 
             for res in directDownloadResolutions:
-                height = res["height"]
+                height = int(res["format_note"].replace("p","").strip())
                 tmp = {}
                 tmp["quality"] = height
                 tmp["url"] = res["url"]
@@ -127,29 +129,25 @@ class YoutubeDownloader:
                 if height not in availableResolutions:
                     availableResolutions[height]= tmp
             
-            directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none"]
+            directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res["acodec"] != None]
 
             for res in directDownloadResolutions:
-                height = res["height"]
+                height = int(res["format_note"].replace("p","").strip())
                 tmp = {}
                 tmp["quality"] = height
                 tmp["url"] = None
                 tmp.update(self.extractFileSize(res))
                 
                 if height not in availableResolutions:
-                    if tmp["unit"] == "MB":
-                        if tmp["filesize"] < 300:
-                            availableResolutions[height]= tmp
+                    if height > 720:
+                        if duration > 30 * 60:
+                            continue
+                    availableResolutions[height]= tmp
                     
         except Exception as e:
             print(f'error -> {str(e)}')
         
-        tmp = dict(sorted(availableResolutions.items(),reverse=True))
-        final = []
-        for item in tmp.items():
-            final.append(item[1])
-        
-        return final
+        return dict(sorted(availableResolutions.items(),reverse=True))
     
     def extractAudioResolutions(self,info):
         availableBitrates = {}
