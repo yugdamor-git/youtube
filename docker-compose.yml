@@ -14,7 +14,16 @@ services:
     
     volumes:
       - ./media:/usr/src/app/media
-
+  
+  frontend:
+    container_name: frontend
+    build:
+        context: ./services/frontend
+        dockerfile: Dockerfile
+    
+    ports:
+        - "3000:3000"
+        
   file-manager:
     build: ./services/file-manager
     command: python FileManager.py
