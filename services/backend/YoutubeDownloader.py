@@ -144,15 +144,12 @@ class YoutubeDownloader:
         except Exception as e:
             print(f'error -> {str(e)}')
         
-        tmp = sorted(availableResolutions.items(),reverse=True)
-        
+        tmp = dict(sorted(availableResolutions.items(),reverse=True))
         final = []
+        for item in tmp.items():
+            final.append(item[1])
         
-        for key in tmp:
-            final.append(tmp[key])
-        
-        
-        return 
+        return final
     
     def extractAudioResolutions(self,info):
         availableBitrates = {}
@@ -173,15 +170,13 @@ class YoutubeDownloader:
                         availableBitrates[abr] = tmp
         except Exception as e:
             print(f'error -> {str(e)}')
-            
-        tmp = sorted(availableBitrates.items(),reverse=True)
         
+        tmp = dict(sorted(availableBitrates.items(),reverse=True))
         final = []
+        for item in tmp.items():
+            final.append(item[1])
         
-        for key in tmp:
-            final.append(tmp[key])
-        
-        return 
+        return final
     
     def downloadVideo(self,key,quality):
         
