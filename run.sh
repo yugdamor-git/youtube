@@ -1,6 +1,6 @@
 #!/bin/sh
-exec "git pull"
-exec "docker compose build"
-exec "docker compose down"
-exec "docker compose up -d backend-node"
-exec "docker compose up -d nginx-node"
+git pull
+docker compose build
+docker compose down
+docker compose up -d backend-node
+docker compose up -d nginx-node
