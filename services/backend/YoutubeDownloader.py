@@ -252,6 +252,8 @@ class YoutubeDownloader:
                 
                 continue
             
+            filePath.touch()
+            
             f = open(filePath, 'wb')
             
             for chunk in r.iter_content(chunk_size=512 * 1024): 
