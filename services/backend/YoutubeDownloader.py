@@ -166,8 +166,7 @@ class YoutubeDownloader:
                 tmp.update(self.extractFileSize(bitrate))
                 
                 if abr not in availableBitrates:
-                    if tmp["unit"] == "MB":
-                        availableBitrates[abr] = tmp
+                    availableBitrates[abr] = tmp
         except Exception as e:
             print(f'error -> {str(e)}')
         
