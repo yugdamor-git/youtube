@@ -69,6 +69,8 @@ class YoutubeDownloader:
         
         data["fromCache"] = False
         
+        
+        
         return data
     
     def convert_size(self,size_bytes):
@@ -142,7 +144,15 @@ class YoutubeDownloader:
         except Exception as e:
             print(f'error -> {str(e)}')
         
-        return dict(sorted(availableResolutions.items(),reverse=True))
+        tmp = dict(sorted(availableResolutions.items(),reverse=True))
+        
+        final = []
+        
+        for key in tmp:
+            final.append(tmp[key])
+        
+        
+        return 
     
     def extractAudioResolutions(self,info):
         availableBitrates = {}
@@ -163,8 +173,15 @@ class YoutubeDownloader:
                         availableBitrates[abr] = tmp
         except Exception as e:
             print(f'error -> {str(e)}')
+            
+        tmp = dict(sorted(availableBitrates.items(),reverse=True))
         
-        return dict(sorted(availableBitrates.items(),reverse=True))
+        final = []
+        
+        for key in tmp:
+            final.append(tmp[key])
+        
+        return final
     
     def downloadVideo(self,key,quality):
         
