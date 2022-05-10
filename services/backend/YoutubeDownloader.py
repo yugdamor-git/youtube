@@ -121,7 +121,7 @@ class YoutubeDownloader:
 
             for res in directDownloadResolutions:
                 try:
-                    height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
+                    height = int(res["format_note"].strip("p"))
                     tmp = {}
                     tmp["quality"] = height
                     tmp["label"] = f'{height}p'
@@ -138,7 +138,7 @@ class YoutubeDownloader:
 
             for res in directDownloadResolutions:
                 try:
-                    height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
+                    height = int(res["format_note"].strip("p"))
                     tmp = {}
                     tmp["quality"] = height
                     tmp["label"] = f'{height}p'
