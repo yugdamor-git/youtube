@@ -149,6 +149,8 @@ class YoutubeDownloader:
                         if height > 720:
                             if duration > 30 * 60:
                                 continue
+                        if duration > 40 * 60:
+                            continue
                         availableResolutions[height]= tmp
                 except:
                     pass
@@ -233,7 +235,6 @@ class YoutubeDownloader:
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
-                    'preferredquality': str(quality),
                 }],
                 'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
                 'noplaylist': True,

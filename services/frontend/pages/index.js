@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import meta from "../public/meta";
+
+import AdSense from 'react-adsense';
+
 ////////////// function for languages handler //////////
 export async function getStaticProps({ locale }) {
   return {
@@ -232,10 +235,20 @@ export default function Home(props) {
         href="/"
       />
       <div className="flex justify-center flex-center mt-5">
-      <ins className="adsbygoogle"
+      
+      <AdSense.Google
+      client="ca-pub-3476621303569503"
+      slot="5118507655"
+      style={{ width: 320, height: 100, display:"inline-block" }}
+      format=''
+    />
+
+      {/* <ins className="adsbygoogle"
      style={{display:"inline-block",width:"320px",height:"100px"}}
      data-ad-client="ca-pub-3476621303569503"
-     data-ad-slot="5118507655"></ins>
+     data-ad-slot="5118507655"></ins> */}
+      
+      
       </div>
       <Link
         data={{
@@ -248,12 +261,24 @@ export default function Home(props) {
         contentType="video"
       />
       <div className="flex justify-center flex-center mt-5">
-      <ins className="adsbygoogle"
+      
+      <AdSense.Google
+      client="ca-pub-3476621303569503"
+      slot="3627285369"
+      style={{ display: 'block' }}
+      format='auto'
+      responsive='true'
+      layoutKey='-gw-1+2a-9x+5c'
+    />
+
+      {/* <ins className="adsbygoogle"
      style={{display:"block"}}
      data-ad-client="ca-pub-3476621303569503"
      data-ad-slot="3627285369"
      data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+     data-full-width-responsive="true"></ins> */}
+      
+      
       </div>
 
       <Cards
