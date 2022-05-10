@@ -26,6 +26,7 @@ class LogManager:
             {"timestamp": today,"type":f'{countFor}',"server":self.ip}, {"$inc": {"count": 1},"$set":{"updatedAt":currentTime}}
         )
         
+        
         self.database.requestCount.update_one(
             {"timestamp": today , "type":f'{countFor}',"server":"all"},
             {"$setOnInsert": {"type": f'{countFor}',"server":"all", "count": 0,"createdAt":currentTime,"updatedAt":currentTime}
@@ -34,7 +35,7 @@ class LogManager:
             upsert=True,
         )
 
-        self.database.resolutionCount.update_one(
+        self.database.requestCount.update_one(
             {"timestamp": today,"type":f'{countFor}',"server":"all"}, {"$inc": {"count": 1},"$set":{"updatedAt":currentTime}}
         )
     
