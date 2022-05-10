@@ -30,7 +30,7 @@ async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
       {
         return {
           data:{
-            downloadUrl:downloadUrl + `&title=ytshorts-savetube-${titleSlug}`
+            downloadUrl:downloadUrl + `&title=${titleSlug}-ytshorts.savetube.me`
           }
         }
       }
@@ -120,7 +120,7 @@ const Video = ({currentVideoData,contentType}) => {
                 {
                   contentType == "audio" &&
                 currentVideoData.audio_formats.map((item)=>(
-                  <option key={item.quality} value={item.quality}>{item.quality}kbps</option>
+                  <option key={item.quality} value={item.quality}>{item.label}</option>
                 ))
                
                 }
