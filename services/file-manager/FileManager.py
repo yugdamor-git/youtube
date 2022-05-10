@@ -40,7 +40,7 @@ class FileManager:
                     else:
                         print(f'new file : {file}')
 
-    def getDirectorySize(path):
+    def getDirectorySize(self,path):
         filesize = sh.du("-sh", str(path)).split("\t")[0].strip()
         return filesize
     

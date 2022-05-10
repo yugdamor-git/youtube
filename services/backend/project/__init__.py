@@ -126,11 +126,11 @@ def stats():
     
     resolutionCount = list(lm.database.resolutionCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
-    return jsonify({
+    return '<pre>'+jsonify({
         "storage":storage,
         "requestCount":requestCount,
         "resolutionCount":resolutionCount
-    })
+    }) +'</pre>'
     
 
 @app.route('/media/<folderName>/<fileName>')
