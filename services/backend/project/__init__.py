@@ -5,6 +5,8 @@ from pathlib import Path
 from YoutubeDownloader import YoutubeDownloader
 from flask_cors import CORS
 import time
+import datetime
+from json import JSONEncoder
 
 import json
 
@@ -17,6 +19,13 @@ yd = YoutubeDownloader()
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/*": {"Access-Control-Allow-Origin": "*"}})
+
+
+class DateTimeEncoder(JSONEncoder):
+        #Override the default method
+        def default(self, obj):
+            if isinstance(obj, (datetime.date, datetime.datetime)):
+                return obj.isoformat()
 
 
 @app.route("/")
@@ -134,7 +143,7 @@ def stats():
         "resolutionCount":resolutionCount
     }
     
-    return f'<html><body><pre><code>{json.dumps(data,indent=2)}</code></pre></body></html>'
+    return f'<html><body><pre><code>{json.dumps(data,indent=2,cls=DateTimeEncoder)}</code></pre></body></html>'
 
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
