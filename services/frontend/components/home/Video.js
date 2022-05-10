@@ -16,7 +16,7 @@ async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
       console.log(`downloadUrl : ${downloadUrl}`)
       if(downloadUrl == null || contentType=="audio")
       {
-        const url = `http://148.251.41.232:1337/download/${contentType}/${quality}/${key}`
+        const url = `https://api.savetube.me/download/${contentType}/${quality}/${key}`
 
         const response = await fetch(
             url,

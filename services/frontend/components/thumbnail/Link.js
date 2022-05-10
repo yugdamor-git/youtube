@@ -4,7 +4,7 @@ import Images from "./Images";
 
 async function fetchThumbnailData(url) {
 
-  const response = await fetch(`http://148.251.41.232:1337/download/thumbnail?url=${url}`);
+  const response = await fetch(`https://api.savetube.me/download/thumbnail?url=${url}`);
 
   const data = await response.json();
 
