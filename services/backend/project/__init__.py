@@ -6,6 +6,8 @@ from YoutubeDownloader import YoutubeDownloader
 from flask_cors import CORS
 import time
 
+import json
+
 from LogManager import LogManager
 
 lm = LogManager()
@@ -126,12 +128,13 @@ def stats():
     
     resolutionCount = list(lm.database.resolutionCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
-    return '<pre>'+jsonify({
+    data = {
         "storage":storage,
         "requestCount":requestCount,
         "resolutionCount":resolutionCount
-    }) +'</pre>'
+    }
     
+    return f'<html><body><pre><code>{json.dumps(data,indent=2)}</code></pre></body></html>'
 
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
