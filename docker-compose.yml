@@ -116,5 +116,8 @@ services:
       - ./services/nginx/config:/config
     restart: unless-stopped
 
+    env_file:
+      - ./.env.prod
+
 
 # docker pull nginxinc/amplify-agent
