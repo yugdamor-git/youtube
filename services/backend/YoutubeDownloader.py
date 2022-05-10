@@ -125,7 +125,6 @@ class YoutubeDownloader:
                     tmp = {}
                     tmp["quality"] = height
                     tmp["label"] = f'{height}p'
-                    
                     tmp["url"] = res["url"]
                     
                     tmp.update(self.extractFileSize(res))
@@ -142,6 +141,7 @@ class YoutubeDownloader:
                     height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
                     tmp = {}
                     tmp["quality"] = height
+                    tmp["label"] = f'{height}p'
                     tmp["url"] = None
                     tmp.update(self.extractFileSize(res))
                     
