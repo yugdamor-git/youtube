@@ -46,20 +46,6 @@ class LogManager:
         today = currentTime.strftime("%d-%m-%Y")
         
         self.database.resolutionCount.update_one(
-            {"timestamp": today , "type":f'{countFor}',"server":self.ip},
-            {"$setOnInsert": {"type": f'{countFor}',"server":self.ip, "count": 0,"createdAt":currentTime,"updatedAt":currentTime}
-             
-             },
-            upsert=True,
-        )
-
-        self.database.resolutionCount.update_one(
-            {"timestamp": today,"type":f'{countFor}',"server":self.ip}, {"$inc": {"count": 1},"$set":{"updatedAt":currentTime}}
-        )
-        
-        
-        
-        self.database.resolutionCount.update_one(
             {"timestamp": today , "type":f'{countFor}',"server":"all"},
             {"$setOnInsert": {"type": f'{countFor}',"server":"all", "count": 0,"createdAt":currentTime,"updatedAt":currentTime}
              
