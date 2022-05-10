@@ -6,6 +6,10 @@ from YoutubeDownloader import YoutubeDownloader
 from flask_cors import CORS
 import time
 
+from LogManager import LogManager
+
+lm = LogManager()
+
 yd = YoutubeDownloader()
 
 app = Flask(__name__)
@@ -18,6 +22,7 @@ def hello_world():
     return jsonify(
         ip=os.environ.get("IP")
     )
+    
     
 @app.route("/info",methods=["GET"])
 def info():
@@ -32,6 +37,8 @@ def info():
         })
     
     info = yd.fetchInfo(url)
+    
+    lm.increaseRequestCount("fetch-request")
     
     return jsonify({
             "status":True,
@@ -76,11 +83,16 @@ def download(downloadType,quality,key):
     else:
         info = None
     
+    lm.increaseResolutionCount(f'{downloadType}-{quality}')
+    
+    lm.increaseRequestCount("download-server-request")
+    
     return jsonify({
             "status":True,
             "message":"200",
             "data":info
         })
+
 
 
 @app.route("/download/thumbnail",methods=["GET"])
@@ -97,13 +109,33 @@ def downloadThumbnail():
     
     info = yd.downloadThumbnail(url) 
     time.sleep(1)
+    lm.increaseRequestCount("download-thumbnail-request")
     return jsonify({
             "status":True,
             "message":"200",
             "data":info
         })
-
+    
+    
+@app.route('/stats')
+def stats():
+    
+    storage = list(lm.database.storage.find({}).sort("updatedAt",-1).limit(20))
+    
+    requestCount = list(lm.database.requestCount.find({}).sort("updatedAt",-1).limit(20))
+    
+    resolutionCount = list(lm.database.resolutionCount.find({}).sort("updatedAt",-1).limit(20))
+    
+    return jsonify({
+        "storage":storage,
+        "requestCount":requestCount,
+        "resolutionCount":resolutionCount
+    })
+    
 
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
+    
+    lm.increaseRequestCount("download-client-request")
+    
     return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)

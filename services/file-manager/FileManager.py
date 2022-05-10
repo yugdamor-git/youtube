@@ -1,6 +1,11 @@
 from datetime import datetime
 from pathlib import Path
 import time
+import sh
+import os
+import pymongo
+
+from LogManager import LogManager
 
 class FileManager:
     def __init__(self):
@@ -13,7 +18,11 @@ class FileManager:
         deleteAfter = 30
         
         self.deleteAfter = deleteAfter * 60
+        
+        self.server = os.environ.get("IP")
 #       30 min
+
+        self.logManager = LogManager()
     
     def main(self):
         now = datetime.now()
@@ -30,12 +39,21 @@ class FileManager:
                         file.unlink()
                     else:
                         print(f'new file : {file}')
-                        
-                        
+
+    def getDirectorySize(path):
+        filesize = sh.du("-sh", str(path)).split("\t")[0].strip()
+        return filesize
+    
+    def manageStorageStats(self):
+        directorySize = self.getDirectorySize(self.mediaDir)
+        self.logManager.updateStorageInfo(directorySize)
+        
+        
 if __name__ == "__main__":
     
     fm = FileManager()
     
     while True:
         fm.main()
+        fm.manageStorageStats()
         time.sleep(5 * 60)
