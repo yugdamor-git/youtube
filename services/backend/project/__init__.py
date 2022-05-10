@@ -120,11 +120,11 @@ def downloadThumbnail():
 @app.route('/stats')
 def stats():
     
-    storage = list(lm.database.storage.find({}).sort("updatedAt",-1).limit(20))
+    storage = list(lm.database.storage.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
-    requestCount = list(lm.database.requestCount.find({}).sort("updatedAt",-1).limit(20))
+    requestCount = list(lm.database.requestCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
-    resolutionCount = list(lm.database.resolutionCount.find({}).sort("updatedAt",-1).limit(20))
+    resolutionCount = list(lm.database.resolutionCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
     return jsonify({
         "storage":storage,
