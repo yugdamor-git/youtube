@@ -15,7 +15,7 @@ class YoutubeDownloader:
         
         self.mediaDir = self.cwd.joinpath("media")
         
-        self.host = f'http://{os.environ.get("IP")}:1337/media/'
+        self.host = f'https://{os.environ.get("IP")}/media/'
         
         self.redis = redisHandler()
         
