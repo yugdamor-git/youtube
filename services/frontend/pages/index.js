@@ -234,22 +234,23 @@ export default function Home(props) {
         thumbnail={t("home:youtube_thumbnail")}
         href="/"
       />
-      <div className="flex justify-center flex-center mt-5">
-      
+     
+
       <AdSense.Google
-      client="ca-pub-3476621303569503"
-      slot="5118507655"
-      style={{ width: "320px", height: "100px", display:"inline-block" }}
-      format=''
-    />
+        className="flex justify-center flex-center mt-5 w-full"
+        client="ca-pub-3476621303569503"
+        slot="5118507655"
+        style={{ display: 'block' }}
+        layout='in-article'
+        format='fluid'
+      />
 
       {/* <ins className="adsbygoogle"
      style={{display:"inline-block",width:"320px",height:"100px"}}
      data-ad-client="ca-pub-3476621303569503"
      data-ad-slot="5118507655"></ins> */}
       
-      
-      </div>
+
       <Link
         data={{
           title: `${t("home:Url_title")}`,
@@ -260,9 +261,9 @@ export default function Home(props) {
         }}
         contentType="video"
       />
-      <div className="flex justify-center flex-center mt-5">
-      
+     
       <AdSense.Google
+      className="flex justify-center flex-center mt-5 w-full"
       client="ca-pub-3476621303569503"
       slot="3627285369"
       style={{ display: 'block' }}
@@ -278,8 +279,7 @@ export default function Home(props) {
      data-ad-format="auto"
      data-full-width-responsive="true"></ins> */}
       
-      
-      </div>
+
 
       <Cards
         cards={CARDS}
