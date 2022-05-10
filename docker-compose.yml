@@ -99,6 +99,22 @@ services:
     
     ports:
         - 11211
+  
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=${IP}
+      - SUBDOMAINS=wildcard,
+      - VALIDATION=dns
+      - DNSPLUGIN=cloudflare
+      - DHLEVEL=4096
+    volumes:
+      - ./services/nginx/config:/config
+    restart: unless-stopped
 
 
 # docker pull nginxinc/amplify-agent
