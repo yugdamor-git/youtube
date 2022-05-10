@@ -239,7 +239,7 @@ export default function Home(props) {
       <AdSense.Google
       client="ca-pub-3476621303569503"
       slot="5118507655"
-      style={{ width: 320, height: 100, display:"inline-block" }}
+      style={{ width: "320px", height: "100px", display:"inline-block" }}
       format=''
     />
 
