@@ -84,7 +84,7 @@ class LogManager:
             upsert=True,
         )
 
-        self.database.resolutionCount.update_one(
+        self.database.storage.update_one(
             {"timestamp": today,"server":self.ip}, {"$set":{"updatedAt":currentTime,"storageUsed": size}}
         )
         
