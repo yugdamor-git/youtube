@@ -235,15 +235,17 @@ export default function Home(props) {
         href="/"
       />
      
-
+     <div style={{ align:"center" }}>
       <AdSense.Google
-        className="flex justify-center flex-center mt-5 w-full"
+        className="mt-5"
         client="ca-pub-3476621303569503"
         slot="5118507655"
         style={{ display: 'block' }}
         layout='in-article'
         format='fluid'
       />
+      </div>
+
 
       {/* <ins className="adsbygoogle"
      style={{display:"inline-block",width:"320px",height:"100px"}}
@@ -261,9 +263,10 @@ export default function Home(props) {
         }}
         contentType="video"
       />
-     
-      <AdSense.Google
-      className="flex justify-center flex-center mt-5 w-full"
+     <div style={{ align:"center" }}>
+
+     <AdSense.Google
+      className="mt-5"
       client="ca-pub-3476621303569503"
       slot="3627285369"
       style={{ display: 'block' }}
@@ -271,6 +274,8 @@ export default function Home(props) {
       responsive='true'
       layoutKey='-gw-1+2a-9x+5c'
     />
+     </div>
+      
 
       {/* <ins className="adsbygoogle"
      style={{display:"block"}}
