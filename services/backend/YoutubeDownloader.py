@@ -124,7 +124,10 @@ class YoutubeDownloader:
                     height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
                     tmp = {}
                     tmp["quality"] = height
+                    tmp["label"] = f'{height}p'
+                    
                     tmp["url"] = res["url"]
+                    
                     tmp.update(self.extractFileSize(res))
                     
                     if height not in availableResolutions:
@@ -154,37 +157,33 @@ class YoutubeDownloader:
             print(f'error -> {str(e)}')
         
         tmp = dict(sorted(availableResolutions.items(),reverse=True))
+        
         final = []
+        
+        default720 = tmp.get(720,None)
+        if default720 != None:
+            default720["label"] = "MP4 video"
+            final.append(default720)
+            
         for item in tmp.items():
             final.append(item[1])
         
         return final
     
     def extractAudioResolutions(self,info):
-        availableBitrates = {}
-        
+        availableBitrates = []
         try:
-            bitrates = [res for res in info['formats'] if "abr" in res and res["abr"] != "none" and res['abr'] != 0]
-
-            for bitrate in bitrates:
-                abr = int(bitrate["abr"])
-                tmp = {}
-                tmp["quality"] = abr
-                tmp["url"] = bitrate["url"]
-                tmp["label"] = bitrate["format"]
-                tmp.update(self.extractFileSize(bitrate))
-                
-                if abr not in availableBitrates:
-                    availableBitrates[abr] = tmp
+            abr = int(128)
+            tmp = {}
+            tmp["quality"] = abr
+            tmp["url"] = None
+            tmp["label"] = f'MP3 {abr}kbps'
+            availableBitrates.append(tmp)
+            
         except Exception as e:
             print(f'error -> {str(e)}')
         
-        tmp = dict(sorted(availableBitrates.items(),reverse=True))
-        final = []
-        for item in tmp.items():
-            final.append(item[1])
-        
-        return final
+        return availableBitrates
     
     def downloadVideo(self,key,quality):
         
