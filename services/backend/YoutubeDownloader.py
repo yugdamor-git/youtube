@@ -120,29 +120,35 @@ class YoutubeDownloader:
             directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res['acodec'] != 'none' and res["ext"] =="mp4"]
 
             for res in directDownloadResolutions:
-                height = int(res["format_note"].replace("p","").strip())
-                tmp = {}
-                tmp["quality"] = height
-                tmp["url"] = res["url"]
-                tmp.update(self.extractFileSize(res))
-                
-                if height not in availableResolutions:
-                    availableResolutions[height]= tmp
+                try:
+                    height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
+                    tmp = {}
+                    tmp["quality"] = height
+                    tmp["url"] = res["url"]
+                    tmp.update(self.extractFileSize(res))
+                    
+                    if height not in availableResolutions:
+                        availableResolutions[height]= tmp
+                except:
+                    pass
             
             directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res["acodec"] != None]
 
             for res in directDownloadResolutions:
-                height = int(res["format_note"].replace("p","").strip())
-                tmp = {}
-                tmp["quality"] = height
-                tmp["url"] = None
-                tmp.update(self.extractFileSize(res))
-                
-                if height not in availableResolutions:
-                    if height > 720:
-                        if duration > 30 * 60:
-                            continue
-                    availableResolutions[height]= tmp
+                try:
+                    height = int(res["format_note"].replace("24p","").replace("30p","").replace("60p","").replace("p","").strip())
+                    tmp = {}
+                    tmp["quality"] = height
+                    tmp["url"] = None
+                    tmp.update(self.extractFileSize(res))
+                    
+                    if height not in availableResolutions:
+                        if height > 720:
+                            if duration > 30 * 60:
+                                continue
+                        availableResolutions[height]= tmp
+                except:
+                    pass
                     
         except Exception as e:
             print(f'error -> {str(e)}')
@@ -184,7 +190,7 @@ class YoutubeDownloader:
         
         data = self.redis.get(key)
         
-        fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp4'
+        fileName = f'{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.mp4'
         
         if self.mediaDir.joinpath(fileName).exists() == True:
             return {
@@ -194,7 +200,7 @@ class YoutubeDownloader:
         
         ydl_opts = {
         'format': f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-        'outtmpl': f'media/%(id)s/ytshorts-savetube-{data["titleSlug"]}-{quality}.%(ext)s',
+        'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
         'noplaylist': True,
         'quiet': True,
         'verbose': False
@@ -214,7 +220,7 @@ class YoutubeDownloader:
         
         data = self.redis.get(key)
         
-        fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{quality}.mp3'
+        fileName = f'{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.mp3'
         
         if self.mediaDir.joinpath(fileName).exists() == True:
             return {
@@ -229,7 +235,7 @@ class YoutubeDownloader:
                     'preferredcodec': 'mp3',
                     'preferredquality': str(quality),
                 }],
-                'outtmpl': f'media/%(id)s/ytshorts-savetube-{data["titleSlug"]}-{quality}.%(ext)s',
+                'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
                 'noplaylist': True,
                 'quiet': True,
                 'verbose': False
@@ -259,7 +265,7 @@ class YoutubeDownloader:
         for resolution in self.image_resolutions:
             r = requests.get(self.image_resolutions[resolution].format(id=data['id']))
             
-            fileName = f'{data["id"]}/ytshorts-savetube-{data["titleSlug"]}-{slugify(resolution)}.jpg'
+            fileName = f'{data["id"]}/{data["titleSlug"]}-{slugify(resolution)}-ytshorts.savetube.me.jpg'
             
             filePath = self.mediaDir.joinpath(fileName)
             

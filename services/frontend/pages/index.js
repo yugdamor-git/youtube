@@ -87,7 +87,9 @@ export default function Home(props) {
   ];
 
 
- 
+  return (
+    <div className="text-3xl text-center">we are updating our site, we will be back soon.</div>
+  )
 
   return (
     <div>
