@@ -169,18 +169,22 @@ class YoutubeDownloader:
         
         for item in info["formats"]:
             try:
+                width = item.get("width")
+                height = item.get("height")
                 
                 res = item["format"].split("(")[-1].strip(")").split("p")[0]
                 
-                if f'{res}p' in self.resolutionMap and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
+                if f'{res}p' in self.resolutionMap:
                     rm = self.resolutionMap[f'{res}p']
-                    height = rm["height"]
-                    tmp = {}
-                    tmp["quality"] = rm["height"]
-                    tmp["label"] = f'{res}p'
-                    tmp["url"] = None
                     
-                    availableResolutions[height]= tmp
+                    if height == rm["height"] and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
+                        
+                        tmp = {}
+                        tmp["quality"] = rm["height"]
+                        tmp["label"] = f'{res}p'
+                        tmp["url"] = item["url"]
+                        
+                        availableResolutions[height]= tmp
             except:
                 pass
         
