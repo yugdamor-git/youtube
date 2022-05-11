@@ -126,7 +126,7 @@ const Video = ({currentVideoData,contentType}) => {
                 {
                   contentType == "audio" &&
                 currentVideoData.audio_formats.map((item)=>{
-                  <option key={item.quality} value={item.quality}>{item.label}</option>
+                  return <option key={item.quality} value={item.quality}>{item.label}</option>
                 })
                
                 }
