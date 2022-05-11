@@ -28,6 +28,46 @@ class YoutubeDownloader:
         }
         
         
+        self.resolutionMap = {
+            "144p":{
+                "height":256,
+                "width":144,
+            },
+            "240p":{
+                "height":352,
+                "width":240
+            },
+            "360p":{
+                "height":640,
+                "width":360
+            },
+            "480p":{
+                "height":640,
+                "width":480
+            },
+            "720p":{
+                "height":1280,
+                "width":720
+            },
+            "1080p":{
+                "height":1920,
+                "width":1080
+            },
+            "1440p":{
+                "height":2560,
+                "width":1440
+            },
+            "2160p":{
+                "height":3840,
+                "width":2160
+            },
+            "4320p":{
+                "height":7680,
+                "width":4320
+            }
+        }
+        
+        
         
         if not self.mediaDir.exists():
             self.mediaDir.mkdir()
@@ -127,53 +167,84 @@ class YoutubeDownloader:
         
         availableResolutions = {}
         
-        try:
-            directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res['acodec'] != 'none' and res["ext"] =="mp4"]
-
-            for res in directDownloadResolutions:
-                try:
-                    height = int(res["format_note"].strip("p"))
-                    tmp = {}
-                    tmp["quality"] = height
-                    tmp["label"] = f'{height}p'
-                    tmp["url"] = res["url"]
-                    
-                    tmp.update(self.extractFileSize(res))
-                    
-                    if height not in availableResolutions:
+        for item in info["formats"]:
+            width = item.get("width")
+            height = item.get("height")
+    
+            if height != None and width != None:
+                for res in self.resolutionMap:
+                    r = self.resolutionMap[res]
+                    if height == r["height"] and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
+                        tmp = {}
+                        tmp["quality"] = r["height"]
+                        tmp["label"] = res
+                        tmp["url"] = item["url"]
                         availableResolutions[height]= tmp
-                except:
-                    pass
-            
-            directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res["acodec"] != None]
-
-            for res in directDownloadResolutions:
-                try:
-                    height = int(res["format_note"].strip("p"))
-                    tmp = {}
-                    tmp["quality"] = height
-                    tmp["label"] = f'{height}p'
-                    tmp["url"] = None
-                    tmp.update(self.extractFileSize(res))
-                    
-                    if height not in availableResolutions:
-                        
-                        if duration <= 20 * 60:
+        
+        for item in info["formats"]:
+            width = item.get("width")
+            height = item.get("height")
+    
+            if height != None and width != None:
+                for res in self.resolutionMap:
+                    r = self.resolutionMap[res]
+                    if height == r["height"]:
+                        tmp = {}
+                        tmp["quality"] = r["height"]
+                        tmp["label"] = res
+                        tmp["url"] = None
+                        if height not in availableResolutions:
                             availableResolutions[height]= tmp
-                        elif duration <= 30 * 60 and duration > 20 * 60:
-                            if height <= 1080:
-                                availableResolutions[height]= tmp
-                        elif duration <= 40 * 60 and duration < 30 * 60:
-                            if height <= 720:
-                                availableResolutions[height] = tmp
-                        else:
-                            continue
-                        availableResolutions[height]= tmp
-                except:
-                    pass
+        
+        
+        
+        # try:
+        #     directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res['acodec'] != 'none' and res["ext"] =="mp4"]
+
+        #     for res in directDownloadResolutions:
+        #         try:
+        #             height = int(res["format_note"].strip("p"))
+        #             tmp = {}
+        #             tmp["quality"] = height
+        #             tmp["label"] = f'{height}p'
+        #             tmp["url"] = res["url"]
                     
-        except Exception as e:
-            print(f'error -> {str(e)}')
+        #             tmp.update(self.extractFileSize(res))
+                    
+        #             if height not in availableResolutions:
+        #                 availableResolutions[height]= tmp
+        #         except:
+        #             pass
+            
+        #     directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res["acodec"] != None]
+
+        #     for res in directDownloadResolutions:
+        #         try:
+        #             height = int(res["format_note"].strip("p"))
+        #             tmp = {}
+        #             tmp["quality"] = height
+        #             tmp["label"] = f'{height}p'
+        #             tmp["url"] = None
+        #             tmp.update(self.extractFileSize(res))
+                    
+        #             if height not in availableResolutions:
+                        
+        #                 if duration <= 20 * 60:
+        #                     availableResolutions[height]= tmp
+        #                 elif duration <= 30 * 60 and duration > 20 * 60:
+        #                     if height <= 1080:
+        #                         availableResolutions[height]= tmp
+        #                 elif duration <= 40 * 60 and duration < 30 * 60:
+        #                     if height <= 720:
+        #                         availableResolutions[height] = tmp
+        #                 else:
+        #                     continue
+        #                 availableResolutions[height]= tmp
+        #         except:
+        #             pass
+                    
+        # except Exception as e:
+        #     print(f'error -> {str(e)}')
         
         tmp = dict(sorted(availableResolutions.items(),reverse=True))
         
@@ -218,11 +289,15 @@ class YoutubeDownloader:
         }
         
         ydl_opts = {
-        'format': f'bestvideo[width<={quality}][ext=mp4]+bestaudio[ext=m4a]/best',
+        'format': f'bestvideo[height<={quality}]+bestaudio',
         'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
         'noplaylist': True,
         'quiet': True,
-        'verbose': False
+        'verbose': False,
+        'postprocessors': [{
+        'key': 'FFmpegVideoConvertor',
+        'preferedformat': 'mp4',
+    }],
         
         }
         
