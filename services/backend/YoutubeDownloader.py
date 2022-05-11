@@ -202,7 +202,7 @@ class YoutubeDownloader:
                     tmp["label"] = f'{res}p'
                     tmp["url"] = None
                     
-                    if height not in availableResolutions:
+                    if not height in availableResolutions:
                         if duration <= 20 * 60:
                             availableResolutions[height]= tmp
                         elif duration <= 30 * 60 and duration > 20 * 60:
