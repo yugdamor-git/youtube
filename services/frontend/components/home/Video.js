@@ -91,7 +91,7 @@ const Video = ({currentVideoData,contentType}) => {
           {currentVideoData.title}
         </h3>
         {/* <p className="text-left">Joseph Yatim</p> */}
-        <p className="text-left">{Math.round(currentVideoData.duration/60,2)} min</p>
+        <p className="text-left">{currentVideoData.durationLabel}</p>
         <hr
           className="my-[.3rem]"
           style={{

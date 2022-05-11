@@ -32,6 +32,16 @@ class YoutubeDownloader:
         if not self.mediaDir.exists():
             self.mediaDir.mkdir()
         
+    def formatDuration(self,duration):
+        try:
+            d = int(duration)
+            if d < 60:
+                return f'{duration} sec'
+            else:
+                return f'{round(duration/60,2)} min'
+        except:
+            return f'NA'
+        
     
     def fetchInfo(self,youtubeUrl):
         
@@ -61,6 +71,7 @@ class YoutubeDownloader:
         'titleSlug':slugify(info["fulltitle"]),
         "thumbnail": info["thumbnail"],
         "duration": info["duration"],
+        "durationLabel":self.formatDuration(info["duration"]),
         "audio_formats": self.extractAudioResolutions(info),
         "video_formats":self.extractVideoResolutions(info)
         }
@@ -146,10 +157,16 @@ class YoutubeDownloader:
                     tmp.update(self.extractFileSize(res))
                     
                     if height not in availableResolutions:
-                        if height > 720:
-                            if duration > 30 * 60:
-                                continue
-                        if duration > 40 * 60:
+                        
+                        if duration <= 20 * 60:
+                            availableResolutions[height]= tmp
+                        elif duration <= 30 * 60 and duration > 20 * 60:
+                            if height <= 1080:
+                                availableResolutions[height]= tmp
+                        elif duration <= 40 * 60 and duration < 30 * 60:
+                            if height <= 720:
+                                availableResolutions[height] = tmp
+                        else:
                             continue
                         availableResolutions[height]= tmp
                 except:
@@ -165,7 +182,7 @@ class YoutubeDownloader:
         default720 = tmp.get(720,None)
         if default720 != None:
             copyTmp = default720.copy()
-            copyTmp["label"] = "MP4 video - 720p"
+            copyTmp["label"] = "MP4 - 720p"
             final.append(copyTmp)
             
         for item in tmp.items():
