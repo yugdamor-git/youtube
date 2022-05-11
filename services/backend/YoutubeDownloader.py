@@ -197,7 +197,16 @@ class YoutubeDownloader:
                     tmp["url"] = None
                     
                     if height not in availableResolutions:
-                        availableResolutions[height]= tmp
+                        if duration <= 20 * 60:
+                            availableResolutions[height]= tmp
+                        elif duration <= 30 * 60 and duration > 20 * 60:
+                            if height <= 1080:
+                                availableResolutions[height]= tmp
+                        elif duration <= 40 * 60 and duration < 30 * 60:
+                            if height <= 720:
+                                availableResolutions[height] = tmp
+                        else:
+                            continue
             except:
                 pass
             
