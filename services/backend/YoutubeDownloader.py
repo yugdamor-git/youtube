@@ -218,7 +218,7 @@ class YoutubeDownloader:
         }
         
         ydl_opts = {
-        'format': f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'format': f'bestvideo[width<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp3]/best',
         'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
         'noplaylist': True,
         'quiet': True,
