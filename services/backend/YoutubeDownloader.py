@@ -310,11 +310,6 @@ class YoutubeDownloader:
         'noplaylist': True,
         'quiet': True,
         'verbose': False,
-        'postprocessors': [{
-        'key': 'FFmpegVideoConvertor',
-        'preferedformat': 'mp4',
-    }],
-        
         }
         
         ydl = yt_dlp.YoutubeDL(ydl_opts)
