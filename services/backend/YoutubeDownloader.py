@@ -182,19 +182,35 @@ class YoutubeDownloader:
                         availableResolutions[height]= tmp
         
         for item in info["formats"]:
-            width = item.get("width")
-            height = item.get("height")
-    
-            if height != None and width != None:
-                for res in self.resolutionMap:
-                    r = self.resolutionMap[res]
-                    if height == r["height"]:
-                        tmp = {}
-                        tmp["quality"] = r["height"]
-                        tmp["label"] = res
-                        tmp["url"] = None
-                        if height not in availableResolutions:
-                            availableResolutions[height]= tmp
+            try:
+                width = item.get("width")
+                height = item.get("height")
+                
+                res = item["format"].split("(")[-1].strip(")").split("p")[0]
+                
+                if f'{res}p' in self.resolutionMap:
+                    rm = self.resolutionMap[f'{res}p']
+                    height = rm["height"]
+                    tmp = {}
+                    tmp["quality"] = rm["height"]
+                    tmp["label"] = f'{res}p'
+                    tmp["url"] = None
+                    
+                    if height not in availableResolutions:
+                        availableResolutions[height]= tmp
+            except:
+                pass
+            
+            # if height != None and width != None:
+            #     for res in self.resolutionMap:
+            #         r = self.resolutionMap[res]
+            #         if height == r["height"]:
+            #             tmp = {}
+            #             tmp["quality"] = r["height"]
+            #             tmp["label"] = res
+            #             tmp["url"] = None
+            #             if height not in availableResolutions:
+            #                 availableResolutions[height]= tmp
         
         
         
