@@ -168,23 +168,25 @@ class YoutubeDownloader:
         availableResolutions = {}
         
         for item in info["formats"]:
-            width = item.get("width")
-            height = item.get("height")
-    
-            if height != None and width != None:
-                for res in self.resolutionMap:
-                    r = self.resolutionMap[res]
-                    if height == r["height"] and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
-                        tmp = {}
-                        tmp["quality"] = r["height"]
-                        tmp["label"] = res
-                        tmp["url"] = item["url"]
-                        availableResolutions[height]= tmp
+            try:
+                res = item["format"].split("(")[-1].strip(")").split("p")[0]
+                
+                if f'{res}p' in self.resolutionMap and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
+                    rm = self.resolutionMap[f'{res}p']
+                    height = rm["height"]
+                    
+                    tmp = {}
+                    tmp["quality"] = r["height"]
+                    tmp["label"] = res
+                    tmp["url"] = item["url"]
+                    
+                    availableResolutions[height]= tmp
+            except:
+                pass
         
         for item in info["formats"]:
             try:
-                width = item.get("width")
-                height = item.get("height")
+              
                 
                 res = item["format"].split("(")[-1].strip(")").split("p")[0]
                 
@@ -314,7 +316,7 @@ class YoutubeDownloader:
         }
         
         ydl_opts = {
-        'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio',
+        'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
         'outtmpl': f'media/%(id)s/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.%(ext)s',
         'noplaylist': True,
         'quiet': True,
