@@ -266,11 +266,11 @@ class YoutubeDownloader:
         
         final = []
         
-        default720 = tmp.get(1280,None)
-        if default720 != None:
-            copyTmp = default720.copy()
-            copyTmp["label"] = "MP4 - 720p"
-            final.append(copyTmp)
+        # default720 = tmp.get(1280,None)
+        # if default720 != None:
+        #     copyTmp = default720.copy()
+        #     copyTmp["label"] = "MP4 - 720p"
+        #     final.append(copyTmp)
             
         for item in tmp.items():
             final.append(item[1])

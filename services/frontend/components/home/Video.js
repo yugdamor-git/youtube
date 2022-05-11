@@ -112,16 +112,22 @@ const Video = ({currentVideoData,contentType}) => {
             >
              
                 {contentType == "video" &&
-                currentVideoData.video_formats.map((item) => (
-                  <option key={item.quality} value={item.quality}>{item.label}</option>
-                ))
+                currentVideoData.video_formats.map((item) => {
+                  if (item.quality == 720)
+                  {
+                    return <option selected key={item.quality} value={item.quality}>{item.label}</option> 
+                  }
+                  else{
+                    return <option key={item.quality} value={item.quality}>{item.label}</option> 
+                  }
+                })
                 }
                
                 {
                   contentType == "audio" &&
-                currentVideoData.audio_formats.map((item)=>(
+                currentVideoData.audio_formats.map((item)=>{
                   <option key={item.quality} value={item.quality}>{item.label}</option>
-                ))
+                })
                
                 }
                
