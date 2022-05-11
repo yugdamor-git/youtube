@@ -113,7 +113,7 @@ const Video = ({currentVideoData,contentType}) => {
              
                 {contentType == "video" &&
                 currentVideoData.video_formats.map((item) => {
-                  if (item.quality == 720)
+                  if (item.quality == 1280)
                   {
                     return <option selected key={item.quality} value={item.quality}>{item.label}</option> 
                   }
