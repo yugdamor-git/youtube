@@ -76,7 +76,7 @@ class YoutubeDownloader:
         try:
             d = int(duration)
             if d < 60:
-                return f'{duration} sec'
+                return f'{duration} secx'
             else:
                 return f'{round(duration/60,2)} min'
         except:
