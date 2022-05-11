@@ -76,7 +76,7 @@ class YoutubeDownloader:
         try:
             d = int(duration)
             if d < 60:
-                return f'{duration} secx'
+                return f'{duration} sec'
             else:
                 return f'{round(duration/60,2)} min'
         except:
@@ -250,7 +250,7 @@ class YoutubeDownloader:
         
         final = []
         
-        default720 = tmp.get(720,None)
+        default720 = tmp.get(1280,None)
         if default720 != None:
             copyTmp = default720.copy()
             copyTmp["label"] = "MP4 - 720p"
