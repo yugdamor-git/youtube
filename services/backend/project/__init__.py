@@ -79,20 +79,22 @@ def redis():
 
 @app.route("/download/<downloadType>/<quality>/<key>",methods=["GET"])
 def download(downloadType,quality,key):
-    
     if key == None or quality == None or downloadType == None:
         return jsonify({
             "status":False,
             "message":"id,key or quality is missing...",
             "data":None
         })
-    
-    if downloadType == "video":
-        info = yd.downloadVideo(key,quality)
-    elif downloadType == "audio":
-        info = yd.downloadAudio(key,quality)
-    else:
-        info = None
+    message = "200"
+    try:
+        if downloadType == "video":
+            info = yd.downloadVideo(key,quality)
+        elif downloadType == "audio":
+            info = yd.downloadAudio(key,quality)
+        else:
+            info = None
+    except Exception as e:
+        message = str(e)
     
     lm.increaseResolutionCount(f'{downloadType}-{quality}')
     
@@ -100,7 +102,7 @@ def download(downloadType,quality,key):
     
     return jsonify({
             "status":True,
-            "message":"200",
+            "message":message,
             "data":info
         })
 
