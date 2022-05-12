@@ -56,12 +56,17 @@ const Link = ({ data,contentType }) => {
   const [loading, setLoading] = useState(false);
   const [showVid, setShowVid] = useState(false);
 
+  const [btns, setBtns] = useState(true);
+  const [showDownload, setShowDownload] = useState(false);
+
+
   const [currentVideoData,setCurrentVideoData] = useState(null)
-
-
 
   ///////////// validate url function //////////
   const validURL = async(str) => {
+    setBtns(true)
+    setShowDownload(false)
+    setShowVid(false)
     // var pattern = new RegExp(
     //   "^(https?:\\/\\/)?" + // protocol
     //     "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
@@ -90,7 +95,7 @@ const Link = ({ data,contentType }) => {
         data = await fetchThumbnailData(str)
       }
       
-
+      setCurrentVideoData(null)
       setCurrentVideoData(data.data)
         setLoading(false);
         setShowVid(true);
@@ -120,14 +125,16 @@ const Link = ({ data,contentType }) => {
       /// fetch function here
       console.log("started")
 
-     const data = await fetchData(isUrl)
+      const data = await fetchData(isUrl)
 
       setCurrentVideoData(data)
       
       console.log(data)
       
       setLoading(false);
+
       setShowVid(true);
+    
     }
   };
   return (
@@ -163,7 +170,7 @@ const Link = ({ data,contentType }) => {
         </div>
 
       {isUrl && loading && <Loading />}
-      {showVid && <Video contentType={contentType} currentVideoData={currentVideoData} />}
+      {showVid && <Video contentType={contentType} showDownloadp={showDownload} btnsp={btns}  currentVideoData={currentVideoData} />}
       {inputVal.length > 0 && !isUrl && (
         <p className="text-[#dc3545] text-center mt-1">{data.wrong}</p>
       )}

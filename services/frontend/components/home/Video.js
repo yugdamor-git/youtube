@@ -40,11 +40,11 @@ async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
 
 
 
-const Video = ({currentVideoData,contentType}) => {
+const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
   const router = useRouter();
-  const [btns, setBtns] = useState(true);
+  const [btns, setBtns] = useState(btnsp);
   const [loading, setLoading] = useState(false);
-  const [showDownload, setShowDownload] = useState(false);
+  const [showDownload, setShowDownload] = useState(showDownloadp);
   const [video, setVideo] = useState("");
 
   const getDownloadButton = async(currentVideoData,contentType) => {
@@ -71,6 +71,7 @@ const Video = ({currentVideoData,contentType}) => {
 
     setLoading(false);
     setShowDownload(true);
+    
   };
 
   console.log(video);
