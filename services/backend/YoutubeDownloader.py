@@ -329,12 +329,17 @@ class YoutubeDownloader:
         'quiet': True,
         'verbose': False,
         }
-        
-        ydl = yt_dlp.YoutubeDL(ydl_opts)
-        
-        ydl.download(data["url"])
-        
-        os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 -c:a aac {filePath}')
+
+        if data["duration"] <= 60:
+            ydl_opts["outtmpl"] = tmpPath
+            ydl = yt_dlp.YoutubeDL(ydl_opts)        
+            ydl.download(data["url"])
+            os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 -c:a aac {filePath}')
+            os.system(f'rm {tmpPath}')
+        else:
+            ydl_opts["outtmpl"] = filePath
+            ydl = yt_dlp.YoutubeDL(ydl_opts)        
+            ydl.download(data["url"])
         
         return {
             "downloadUrl":f'{self.host}{fileName}',
