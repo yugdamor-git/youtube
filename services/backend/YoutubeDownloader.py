@@ -6,7 +6,6 @@ import math
 import yt_dlp
 import requests
 import hashlib
-import os
 
 class YoutubeDownloader:
     def __init__(self):
@@ -319,35 +318,23 @@ class YoutubeDownloader:
             "downloadUrl":f'{self.host}{fileName}',
             "downloaded":False
         }
-        tmpPath = f'media/{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.tmp.mp4'
-        filePath = f'media/{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.mp4'
-        
+        tmpPath = f'media/{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.mp4'
         ydl_opts = {
         'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'format-sort':'vcodec:h264',
         'outtmpl': tmpPath,
         'noplaylist': True,
         'quiet': True,
         'verbose': False,
         }
-        error = ""
-        try:
-            if data["duration"] <= 60:
-                ydl_opts["outtmpl"] = tmpPath
-                ydl = yt_dlp.YoutubeDL(ydl_opts)        
-                ydl.download(data["url"])
-                os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 {filePath}')
-                os.system(f'rm {tmpPath}')
-            else:
-                ydl_opts["outtmpl"] = filePath
-                ydl = yt_dlp.YoutubeDL(ydl_opts)        
-                ydl.download(data["url"])
-        except Exception as e:
-            error = str(e)
+        
+        ydl = yt_dlp.YoutubeDL(ydl_opts)
+        
+        ydl.download(data["url"])
         
         return {
             "downloadUrl":f'{self.host}{fileName}',
-             "downloaded":True,
-             "error":error
+             "downloaded":True
         }
     
     def downloadAudio(self,key,quality):
