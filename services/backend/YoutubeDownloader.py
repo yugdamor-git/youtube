@@ -324,7 +324,7 @@ class YoutubeDownloader:
         
         ydl_opts = {
         'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-        'format_sort':'vcodec:h264',
+        'format_sort':['vcodec:h264'],
         'outtmpl': tmpPath,
         'noplaylist': True,
         'quiet': True,
