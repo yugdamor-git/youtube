@@ -172,7 +172,7 @@ class YoutubeDownloader:
                 width = item.get("width")
                 height = item.get("height")
                 
-                res = item["format"].split("(")[-1].strip(")").split("p")[0]
+                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
                 
                 if f'{res}p' in self.resolutionMap:
                     rm = self.resolutionMap[f'{res}p']
@@ -183,8 +183,8 @@ class YoutubeDownloader:
                         tmp["quality"] = rm["height"]
                         tmp["label"] = f'{res}p'
                         tmp["url"] = item["url"]
-                        
-                        availableResolutions[height]= tmp
+                        if not res in availableResolutions:
+                            availableResolutions[res]= tmp
             except:
                 pass
         
@@ -192,7 +192,7 @@ class YoutubeDownloader:
             try:
               
                 
-                res = item["format"].split("(")[-1].strip(")").split("p")[0]
+                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
                 
                 if f'{res}p' in self.resolutionMap:
                     rm = self.resolutionMap[f'{res}p']
@@ -202,15 +202,15 @@ class YoutubeDownloader:
                     tmp["label"] = f'{res}p'
                     tmp["url"] = None
                     
-                    if not height in availableResolutions:
+                    if not res in availableResolutions:
                         if duration <= 20 * 60:
-                            availableResolutions[height]= tmp
+                            availableResolutions[res]= tmp
                         elif duration <= 30 * 60 and duration > 20 * 60:
                             if height <= 1080:
-                                availableResolutions[height]= tmp
+                                availableResolutions[res]= tmp
                         elif duration <= 40 * 60 and duration < 30 * 60:
                             if height <= 720:
-                                availableResolutions[height] = tmp
+                                availableResolutions[res] = tmp
                         else:
                             continue
             except:
