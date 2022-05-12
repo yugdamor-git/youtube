@@ -324,12 +324,14 @@ class YoutubeDownloader:
         
         ydl_opts = {
         'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-        'format_sort':['vcodec:h264'],
         'outtmpl': tmpPath,
         'noplaylist': True,
         'quiet': True,
         'verbose': False,
         }
+        
+        if data["duration"]  <= 60:
+            ydl_opts['format_sort'] = ['vcodec:h264']
         
         ydl = yt_dlp.YoutubeDL(ydl_opts)
         
