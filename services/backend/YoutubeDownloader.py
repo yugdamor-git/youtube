@@ -329,21 +329,25 @@ class YoutubeDownloader:
         'quiet': True,
         'verbose': False,
         }
-
-        if data["duration"] <= 60:
-            ydl_opts["outtmpl"] = tmpPath
-            ydl = yt_dlp.YoutubeDL(ydl_opts)        
-            ydl.download(data["url"])
-            os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 -c:a aac {filePath}')
-            os.system(f'rm {tmpPath}')
-        else:
-            ydl_opts["outtmpl"] = filePath
-            ydl = yt_dlp.YoutubeDL(ydl_opts)        
-            ydl.download(data["url"])
+        error = ""
+        try:
+            if data["duration"] <= 60:
+                ydl_opts["outtmpl"] = tmpPath
+                ydl = yt_dlp.YoutubeDL(ydl_opts)        
+                ydl.download(data["url"])
+                os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 -c:a aac {filePath}')
+                os.system(f'rm {tmpPath}')
+            else:
+                ydl_opts["outtmpl"] = filePath
+                ydl = yt_dlp.YoutubeDL(ydl_opts)        
+                ydl.download(data["url"])
+        except Exception as e:
+            error = str(e)
         
         return {
             "downloadUrl":f'{self.host}{fileName}',
-             "downloaded":True
+             "downloaded":True,
+             "error":error
         }
     
     def downloadAudio(self,key,quality):
