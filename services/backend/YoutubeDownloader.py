@@ -159,13 +159,91 @@ class YoutubeDownloader:
         sha1 = hashlib.sha1()
         sha1.update(str(value).encode("utf-8"))
         return sha1.hexdigest()
+    
+    def bucket_sorter_direct_download(self,formats):
+        bucket = {}
+        main_bucket = []
         
+        for item in formats:
+            try:
+                height = item["height"]
+                width = item["width"]
+                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
+                if not res in bucket and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none" and item["ext"] == "mp4":
+                    bucket[res] = []
+                bucket[res].append({"height":height,"width":width,"url":item["url"]})
+            except:
+                pass
+            
+        for key in bucket:
+            bucket[key] = sorted(bucket[key],reverse=True,key=lambda i:i["height"])
+            tmp = bucket[key][0]
+            tmp["quality"] = key
+            tmp["label"] = f'{key}p'
+            
+            main_bucket.append(tmp)
+        return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])    
+    
+    def bucket_sorter_server_downloads(self,formats):
+        bucket = {}
+        main_bucket = []
+        
+        for item in formats:
+            try:
+                height = item["height"]
+                width = item["width"]
+                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
+                if not res in bucket:
+                    bucket[res] = []
+                bucket[res].append({"height":height,"width":width})
+            except:
+                pass
+        
+        for key in bucket:
+            bucket[key] = sorted(bucket[key],reverse=True,key=lambda i:i["height"])
+            tmp = bucket[key][0]
+            tmp["quality"] = key
+            tmp["label"] = f'{key}p'
+            tmp["url"] = None
+            
+            main_bucket.append(tmp)
+        
+        return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])    
     
     def extractVideoResolutions(self,info):
         
         duration = info["duration"]
         
         availableResolutions = {}
+        
+        main_bucket = []
+        
+        
+        direct_downloads = self.bucket_sorter_direct_download(info["formats"])
+        
+        for item in direct_downloads:
+            availableResolutions[item["quality"]] = item
+        
+        server_downloads = self.bucket_sorter_server_downloads(info["formats"])
+        
+        for item in server_downloads:
+            if not item["quality"] in availableResolutions:
+                if duration <= 20 * 60:
+                    availableResolutions[item["quality"]]= item
+                elif duration <= 30 * 60 and duration > 20 * 60:
+                    if item["height"] <= 1080:
+                        availableResolutions[item["quality"]]= item
+                elif duration <= 40 * 60 and duration < 30 * 60:
+                    if item["height"] <= 720:
+                        availableResolutions[item["quality"]] = item
+                else:
+                    continue
+        
+        for key in availableResolutions:
+            main_bucket.append(availableResolutions[key])
+        
+        return sorted(main_bucket,reverse=True,key=lambda x:x["quality"])
+        
         
         for item in info["formats"]:
             try:
@@ -187,6 +265,7 @@ class YoutubeDownloader:
                             availableResolutions[res]= tmp
             except:
                 pass
+        
         
         for item in info["formats"]:
             try:
