@@ -335,7 +335,7 @@ class YoutubeDownloader:
                 ydl_opts["outtmpl"] = tmpPath
                 ydl = yt_dlp.YoutubeDL(ydl_opts)        
                 ydl.download(data["url"])
-                os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 -c:a aac {filePath}')
+                os.system(f'ffmpeg -y -i {tmpPath} -c:v libx264 {filePath}')
                 os.system(f'rm {tmpPath}')
             else:
                 ydl_opts["outtmpl"] = filePath
