@@ -318,10 +318,13 @@ class YoutubeDownloader:
             "downloadUrl":f'{self.host}{fileName}',
             "downloaded":False
         }
+            
+            
         tmpPath = f'media/{data["id"]}/{data["titleSlug"]}-{quality}-ytshorts.savetube.me.mp4'
+        
         ydl_opts = {
         'format':  f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-        'sortorder':'vcodec:h264',
+        'format_sort':'vcodec:h264',
         'outtmpl': tmpPath,
         'noplaylist': True,
         'quiet': True,
