@@ -133,12 +133,15 @@ def downloadThumbnail():
     
 @app.route('/stats')
 def stats():
+    currentTime = datetime.datetime.now()
+        
+    today = currentTime.strftime("%d-%m-%Y")
     
-    storage = list(lm.database.storage.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
+    storage = list(lm.database.storage.find({"timestamp":today},{'_id': False}).sort("updatedAt",-1).limit(20))
     
     requestCount = list(lm.database.requestCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
     
-    resolutionCount = list(lm.database.resolutionCount.find({},{'_id': False}).sort("updatedAt",-1).limit(20))
+    resolutionCount = list(lm.database.resolutionCount.find({"server":"all"},{'_id': False}).sort("updatedAt",-1).limit(20))
     
     data = {
         "storage":storage,
