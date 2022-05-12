@@ -173,7 +173,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
             <a
                 href={video}
                 download
-                className="text-white bg-green-600  hover:bg-green-500  rounded-lg p-2 text-center  mb-2 font-[700] flex items-center cursor-pointer"
+                className="text-white bg-green-600  hover:bg-green-500  rounded-lg p-2 text-center  mb-2 font-[700] flex items-center cursor-pointer justify-center"
               >
                 
                 <img
@@ -181,7 +181,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
                   className="w-[18px] m-2"
                   alt="download"
                 />
-                <span>Download</span>
+                <span className="text-[18px]">Download</span>
               </a>
           </div>
         )}
