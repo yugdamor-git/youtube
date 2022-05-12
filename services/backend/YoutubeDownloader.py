@@ -177,7 +177,7 @@ class YoutubeDownloader:
                 if f'{res}p' in self.resolutionMap:
                     rm = self.resolutionMap[f'{res}p']
                     
-                    if item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none":
+                    if item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none" and item["ext"] == "mp4":
                         
                         tmp = {}
                         tmp["quality"] = rm["height"]
