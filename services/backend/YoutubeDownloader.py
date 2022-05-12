@@ -410,8 +410,8 @@ class YoutubeDownloader:
         'verbose': False,
         }
         
-        # if data["duration"]  <= 60:
-        #     ydl_opts['format_sort'] = ['vcodec:h264']
+        if data["duration"]  <= 60:
+            ydl_opts['format_sort'] = ['vcodec:h264']
         
         ydl = yt_dlp.YoutubeDL(ydl_opts)
         

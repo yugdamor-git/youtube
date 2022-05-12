@@ -114,12 +114,12 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
              
                 {contentType == "video" &&
                 currentVideoData.video_formats.map((item) => {
-                  if (item.quality == 1280)
+                  if (item.label == "720p")
                   {
-                    return <option selected key={item.quality} value={item.quality}>{item.label}</option> 
+                    return <option selected key={item.height} value={item.height}>{item.label}</option> 
                   }
                   else{
-                    return <option key={item.quality} value={item.quality}>{item.label}</option> 
+                    return <option key={item.height} value={item.height}>{item.label}</option> 
                   }
                 })
                 }
