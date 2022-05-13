@@ -56,7 +56,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
 
     for(let item of currentVideoData[`${contentType}_formats`])
     {
-      if (parseInt(item.quality) == parseInt(quality))
+      if (parseInt(item.height) == parseInt(quality))
       {
         downloadUrl = item.url
         break

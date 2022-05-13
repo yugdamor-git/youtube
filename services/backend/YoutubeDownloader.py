@@ -190,8 +190,8 @@ class YoutubeDownloader:
         
         for item in formats:
             try:
-                height = item["width"]
-                width = item["height"]
+                height = item["height"]
+                width = item["width"]
                 res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
                 if not res in bucket and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none" and item["ext"] == "mp4":
                     bucket[res] = []
@@ -214,8 +214,8 @@ class YoutubeDownloader:
         
         for item in formats:
             try:
-                height = item["width"]
-                width = item["height"]
+                height = item["height"]
+                width = item["width"]
                 res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
                 if not res in bucket:
                     bucket[res] = []
