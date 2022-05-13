@@ -78,8 +78,6 @@ class LogManager:
     def insertErrorLog(self,data):
         currentTime = datetime.now()
         
-        today = currentTime.strftime("%d-%m-%Y")
-        
-        data["createdAt"] = today
+        data["createdAt"] = currentTime
         
         self.database.errorLogs.insert_one(data)

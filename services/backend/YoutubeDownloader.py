@@ -5,6 +5,7 @@ from redisHandler import redisHandler
 import math
 import yt_dlp
 import requests
+import youtube_dl
 import hashlib
 
 class YoutubeDownloader:
@@ -100,7 +101,7 @@ class YoutubeDownloader:
             'proxy':os.environ.get("PROXY")
         }
         
-        ydl = yt_dlp.YoutubeDL(options)
+        ydl = youtube_dl.YoutubeDL(options)
         
         info = ydl.extract_info(youtubeUrl, download=False)
         
