@@ -108,7 +108,7 @@ class YoutubeDownloader:
             'noplaylist': True,
         }
         
-        ydl = youtube_dl.YoutubeDL(options)
+        ydl = yt_dlp.YoutubeDL(options)
         
         info = ydl.extract_info(youtubeUrl, download=False)
         
