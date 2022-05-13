@@ -242,12 +242,10 @@ class YoutubeDownloader:
         
         main_bucket = []
         
+        direct_downloads = self.bucket_sorter_direct_download(info["formats"])
         
-        if duration > 60:
-            direct_downloads = self.bucket_sorter_direct_download(info["formats"])
-            
-            for item in direct_downloads:
-                availableResolutions[item["quality"]] = item
+        for item in direct_downloads:
+            availableResolutions[item["quality"]] = item
         
         server_downloads = self.bucket_sorter_server_downloads(info["formats"])
         
