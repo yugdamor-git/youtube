@@ -74,4 +74,12 @@ class LogManager:
         self.database.resolutionCount.update_one(
             {"timestamp": today,"server":self.ip}, {"$set":{"updatedAt":currentTime,"storageUsed": size}}
         )
+    
+    def insertErrorLog(self,data):
+        currentTime = datetime.now()
         
+        today = currentTime.strftime("%d-%m-%Y")
+        
+        data["createdAt"] = today
+        
+        self.database.errorLogs.insert_one(data)

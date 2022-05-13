@@ -8,6 +8,8 @@ import time
 import datetime
 from json import JSONEncoder
 
+import traceback
+
 import json
 
 from LogManager import LogManager
@@ -37,25 +39,33 @@ def hello_world():
     
 @app.route("/info",methods=["GET"])
 def info():
-    
-    url = request.args.get("url",None)
-    
-    if url == None:
+    try:
+        url = request.args.get("url",None)
+        
+        if url == None:
+            return jsonify({
+                "status":False,
+                "message":"url is missing...",
+                "data":None
+            })
+        
+        info = yd.fetchInfo(url)
+        
+        lm.increaseRequestCount("fetch-request")
+        
         return jsonify({
-            "status":False,
-            "message":"url is missing...",
-            "data":None
-        })
-    
-    info = yd.fetchInfo(url)
-    
-    lm.increaseRequestCount("fetch-request")
-    
-    return jsonify({
-            "status":True,
-            "message":"200",
-            "data":info
-        })
+                "status":True,
+                "message":"200",
+                "data":info
+            })
+    except Exception as e:
+        error  = traceback.print_exc()
+        tmp = {}
+        tmp["url"] = url
+        tmp["type"] = "fetch-video-info"
+        tmp["message"] = str(error)
+        lm.insertErrorLog(tmp)
+        
 
 @app.route("/redis",methods=["GET"])
 def redis():
@@ -79,56 +89,73 @@ def redis():
 
 @app.route("/download/<downloadType>/<quality>/<key>",methods=["GET"])
 def download(downloadType,quality,key):
-    if key == None or quality == None or downloadType == None:
-        return jsonify({
-            "status":False,
-            "message":"id,key or quality is missing...",
-            "data":None
-        })
-    message = "200"
-    info = None
     try:
+        if key == None or quality == None or downloadType == None:
+            return jsonify({
+                "status":False,
+                "message":"id,key or quality is missing...",
+                "data":None
+            })
+        message = "200"
+        info = None
+        
         if downloadType == "video":
             info = yd.downloadVideo(key,quality)
         elif downloadType == "audio":
             info = yd.downloadAudio(key,quality)
         else:
             info = None
+        
+        lm.increaseResolutionCount(f'{downloadType}-{quality}')
+        
+        lm.increaseRequestCount("download-server-request")
+        
+        return jsonify({
+                "status":True,
+                "message":message,
+                "data":info
+            })
+    
     except Exception as e:
-        message = str(e)
-    
-    lm.increaseResolutionCount(f'{downloadType}-{quality}')
-    
-    lm.increaseRequestCount("download-server-request")
-    
-    return jsonify({
-            "status":True,
-            "message":message,
-            "data":info
-        })
-
+        error  = traceback.print_exc()
+        tmp = {}
+        tmp["url"] = {
+            "downloadType":downloadType,
+            "quality":quality,
+            "key":key
+        }
+        tmp["type"] = "fetch-download-video-url"
+        tmp["message"] = str(error)
+        lm.insertErrorLog(tmp)
 
 
 @app.route("/download/thumbnail",methods=["GET"])
 def downloadThumbnail():
-    
-    url = request.args.get("url",None)
-    
-    if url == None:
+    try:
+        url = request.args.get("url",None)
+        
+        if url == None:
+            return jsonify({
+                "status":False,
+                "message":"url is missing...",
+                "data":None
+            })
+        
+        info = yd.downloadThumbnail(url) 
+        time.sleep(1)
+        lm.increaseRequestCount("download-thumbnail-request")
         return jsonify({
-            "status":False,
-            "message":"url is missing...",
-            "data":None
-        })
-    
-    info = yd.downloadThumbnail(url) 
-    time.sleep(1)
-    lm.increaseRequestCount("download-thumbnail-request")
-    return jsonify({
-            "status":True,
-            "message":"200",
-            "data":info
-        })
+                "status":True,
+                "message":"200",
+                "data":info
+            })
+    except Exception as e:
+        error  = traceback.print_exc()
+        tmp = {}
+        tmp["type"] = "download-thumbnail"
+        tmp["url"] = url
+        tmp["message"] = str(error)
+        lm.insertErrorLog(tmp)
     
     
 @app.route('/stats')
@@ -153,7 +180,18 @@ def stats():
 
 @app.route('/media/<folderName>/<fileName>')
 def download_file(folderName,fileName):
-    
-    lm.increaseRequestCount("download-client-request")
-    
-    return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)
+    try:
+        
+        lm.increaseRequestCount("download-client-request")
+        
+        return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)
+    except Exception as e:
+        error  = traceback.print_exc()
+        tmp = {}
+        tmp["url"] = {
+            "folderName":folderName,
+            "fileName":folderName
+        }
+        tmp["type"] = "download-video-file"
+        tmp["message"] = str(error)
+        lm.insertErrorLog(tmp)
