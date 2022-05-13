@@ -83,8 +83,16 @@ class YoutubeDownloader:
         except:
             return f'NA'
         
-    
-    def fetchInfo(self,youtubeUrl):
+    def reformatShortsUrl(self,url):
+        if "/shorts/" in url:
+            id = url.split("/shorts/")[-1].split("?")[0]
+            return f'https://www.youtube.com/watch?v={id}'
+        else:
+            return url
+            
+    def fetchInfo(self,ytUrl):
+        
+        youtubeUrl = self.reformatShortsUrl(ytUrl)
         
         key = self.generateHash(youtubeUrl)
         
