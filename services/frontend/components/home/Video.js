@@ -60,7 +60,9 @@ async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
         return {
           data:{
             downloadUrl:downloadUrl + `&title=${titleSlug}-ytshorts.savetube.me`
-          }
+          },
+          "status":true,
+          "message":""
         }
       }
 
@@ -75,6 +77,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
   const [loading, setLoading] = useState(false);
   const [showDownload, setShowDownload] = useState(showDownloadp);
   const [video, setVideo] = useState("");
+  const [errorMsg,setErrorMsg] = useState("");
 
   const getDownloadButton = async(currentVideoData,contentType) => {
     setBtns(false);
@@ -94,12 +97,17 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
 
     const res = await fetchDownloadUrl(currentVideoData.key,quality,contentType,downloadUrl,currentVideoData.titleSlug)
 
-    setVideo(res.data.downloadUrl)
-
-    console.log(video)
-
-    setLoading(false);
-    setShowDownload(true);
+    if (res.status == false)
+    {
+      setErrorMsg(res.message)
+      setLoading(false);
+    }
+    else
+    {
+      setVideo(res.data.downloadUrl)
+      setShowDownload(true);
+    }
+   
     
   };
 
@@ -214,6 +222,8 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
               </a>
           </div>
         )}
+        <p className="text-[#dc3545] text-center mt-1">{errorMsg}</p>
+
       </div>
     </div>
   );
