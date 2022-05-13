@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from matplotlib.image import thumbnail
 from slugify import slugify
 from redisHandler import redisHandler
 import math
@@ -105,13 +106,28 @@ class YoutubeDownloader:
         
         info = ydl.extract_info(youtubeUrl, download=False)
         
+        title = "NA"
+        
+        if "title" in info:
+            title = info["title"]
+        elif "fulltitle" in info:
+            title = info["fulltitle"]
+        
+        thumbnail = None
+        
+        if "thumbnail" in info:
+            thumbnail = info["thumbnail"]
+        elif "thumbnails" in info:
+            if len(info["thumbnails"]) > 0:
+                thumbnail = info["thumbnails"][0]
+        
         data = {
         'id': info['id'],
         'key':key,
         'url':youtubeUrl,
-        'title': info["fulltitle"],
-        'titleSlug':slugify(info["fulltitle"]),
-        "thumbnail": info["thumbnail"],
+        'title': title,
+        'titleSlug':slugify(title),
+        "thumbnail": thumbnail,
         "duration": info["duration"],
         "durationLabel":self.formatDuration(info["duration"]),
         "audio_formats": self.extractAudioResolutions(info),
