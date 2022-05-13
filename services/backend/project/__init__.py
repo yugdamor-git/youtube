@@ -69,7 +69,7 @@ def info():
         
         return jsonify({
                 "status":False,
-                "message":str(e).split(": ")[:2],
+                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
                 "data":None
             })
         
@@ -137,7 +137,7 @@ def download(downloadType,quality,key):
         
         return jsonify({
                 "status":False,
-                "message":str(e).split(": ")[:2],
+                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
                 "data":None
             })
 
@@ -172,7 +172,7 @@ def downloadThumbnail():
         
         return jsonify({
                 "status":False,
-                "message":str(e).split(": ")[:2],
+                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
                 "data":None
             })
     
