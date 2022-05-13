@@ -106,6 +106,7 @@ class YoutubeDownloader:
             'continue_dl': False,
             'skip_download': True,
             'noplaylist': True,
+            'proxy':'http://torproxy:81118'
         }
         
         ydl = yt_dlp.YoutubeDL(options)

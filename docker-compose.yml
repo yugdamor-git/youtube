@@ -115,6 +115,12 @@ services:
     volumes:
       - ./services/nginx/config:/config
     restart: unless-stopped
+  
+  torproxy:
+    image: dperson/torproxy
+    ports:
+      - 8118:8118
+      - 9050-9050
 
 
 
