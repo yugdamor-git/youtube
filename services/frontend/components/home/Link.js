@@ -56,6 +56,8 @@ const Link = ({ data,contentType }) => {
   const [loading, setLoading] = useState(false);
   const [showVid, setShowVid] = useState(false);
 
+  const [errorMsg,setErrorMsg] = useState("");
+
   const [btns, setBtns] = useState(true);
   const [showDownload, setShowDownload] = useState(false);
 
@@ -64,6 +66,7 @@ const Link = ({ data,contentType }) => {
 
   ///////////// validate url function //////////
   const validURL = async(str) => {
+    setErrorMsg("")
     setBtns(true)
     setShowDownload(false)
     setShowVid(false)
@@ -89,20 +92,29 @@ const Link = ({ data,contentType }) => {
       if (contentType == "video" || contentType == "audio")
       {
          data = await fetchData(str)
+         
       }
       else
       {
         data = await fetchThumbnailData(str)
       }
-      
-      setCurrentVideoData(null)
-      setCurrentVideoData(data.data)
+
+      if(data.status == true)
+      {
+        setCurrentVideoData(data.data)
         setLoading(false);
         setShowVid(true);
 
         setTimeout(()=>{
           scrollDown("video")
         },300)
+      }
+      else
+      {
+        setCurrentVideoData(null)
+        setLoading(false);
+        setErrorMsg(data.message)
+      }
 
     }
 
@@ -171,9 +183,9 @@ const Link = ({ data,contentType }) => {
 
       {isUrl && loading && <Loading />}
       {showVid && <Video contentType={contentType} showDownloadp={showDownload} btnsp={btns}  currentVideoData={currentVideoData} />}
-      {inputVal.length > 0 && !isUrl && (
-        <p className="text-[#dc3545] text-center mt-1">{data.wrong}</p>
-      )}
+      {/* {inputVal.length > 0 && !isUrl && ( */}
+        <p className="text-[#dc3545] text-center mt-1">{errorMsg}</p>
+      {/* )} */}
 
      
     </div>
