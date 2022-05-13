@@ -206,6 +206,31 @@ class YoutubeDownloader:
             tmp["label"] = f'{key}p'
             
             main_bucket.append(tmp)
+        return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])
+    
+    def bucket_sorter_direct_download_for_shorts(self,formats):
+        bucket = {}
+        main_bucket = []
+        
+        for item in formats:
+            try:
+                if item["format_id"] == "22":
+                    height = item["height"]
+                    width = item["width"]
+                    res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
+                    if not res in bucket and item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none" and item["ext"] == "mp4":
+                        bucket[res] = []
+                    bucket[res].append({"height":height,"width":width,"url":item["url"]})
+            except:
+                pass
+            
+        for key in bucket:
+            bucket[key] = sorted(bucket[key],reverse=True,key=lambda i:i["height"])
+            tmp = bucket[key][0]
+            tmp["quality"] = key
+            tmp["label"] = f'{key}p'
+            
+            main_bucket.append(tmp)
         return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])    
     
     def bucket_sorter_server_downloads(self,formats):
@@ -242,7 +267,12 @@ class YoutubeDownloader:
         
         main_bucket = []
         
-        direct_downloads = self.bucket_sorter_direct_download(info["formats"])
+        direct_downloads = []
+        
+        if duration <= 60:
+            direct_downloads = self.bucket_sorter_direct_download_for_shorts(info["formats"])
+        else:
+            direct_downloads = self.bucket_sorter_direct_download(info["formats"])
         
         for item in direct_downloads:
             availableResolutions[item["quality"]] = item
