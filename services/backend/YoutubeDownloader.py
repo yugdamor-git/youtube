@@ -1,6 +1,5 @@
 from pathlib import Path
 import os
-from matplotlib.image import thumbnail
 from slugify import slugify
 from redisHandler import redisHandler
 import math
