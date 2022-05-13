@@ -98,7 +98,6 @@ class YoutubeDownloader:
             'continue_dl': False,
             'skip_download': True,
             'noplaylist': True,
-            'proxy':os.environ.get("PROXY")
         }
         
         ydl = youtube_dl.YoutubeDL(options)
