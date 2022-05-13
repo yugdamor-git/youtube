@@ -59,7 +59,7 @@ def info():
                 "data":info
             })
     except Exception as e:
-        error  = traceback.print_exc()
+        error  = traceback.format_exc()
         tmp = {}
         tmp["url"] = url
         tmp["type"] = "fetch-video-info"
@@ -117,7 +117,7 @@ def download(downloadType,quality,key):
             })
     
     except Exception as e:
-        error  = traceback.print_exc()
+        error  = traceback.format_exc()
         tmp = {}
         tmp["url"] = {
             "downloadType":downloadType,
@@ -150,7 +150,7 @@ def downloadThumbnail():
                 "data":info
             })
     except Exception as e:
-        error  = traceback.print_exc()
+        error  = traceback.format_exc()
         tmp = {}
         tmp["type"] = "download-thumbnail"
         tmp["url"] = url
@@ -186,7 +186,7 @@ def download_file(folderName,fileName):
         
         return send_from_directory(f'/usr/src/app/media/{folderName}',fileName, as_attachment=True)
     except Exception as e:
-        error  = traceback.print_exc()
+        error  =traceback.format_exc()
         tmp = {}
         tmp["url"] = {
             "folderName":folderName,
