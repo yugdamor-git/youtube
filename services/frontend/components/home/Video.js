@@ -9,7 +9,7 @@ const demoVideo = {
 
 async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
     {
-      
+      const max_retry = 3
       console.log(`content type : ${contentType}`)
       console.log(`quality : ${quality}`)
       console.log(`key : ${key}`)
@@ -17,12 +17,41 @@ async function fetchDownloadUrl(key,quality,contentType,downloadUrl,titleSlug)
       if(downloadUrl == null || contentType=="audio")
       {
         const url = `https://api.savetube.me/download/${contentType}/${quality}/${key}`
-
-        const response = await fetch(
-            url,
-        )
         
-        const jsonData = await response.json();
+        let response = null
+
+        for (let i = 0; i <= max_retry; i++) {
+          
+          try
+          {
+             response = await fetch(
+              url,
+          )
+          break
+          }
+          catch(err)
+          {
+
+          }
+          
+
+        }
+        
+        let jsonData = null
+        if (response == null)
+        {
+          jsonData = {
+            "status":false,
+            "message":"Sorry, you can't download this video at this time.Please try downloading the video again later.",
+            "data":null
+          }
+        }
+        else
+        {
+          jsonData = await response.json();
+        }
+        
+        
 
         return jsonData
       }
