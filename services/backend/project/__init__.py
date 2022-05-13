@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify,send_from_directory,request
+from flask import Flask, jsonify,send_from_directory,request,redirect
 import os
 from pathlib import Path
 from YoutubeDownloader import YoutubeDownloader
@@ -58,6 +58,7 @@ def info():
                 "message":"200",
                 "data":info
             })
+        
     except Exception as e:
         error  = traceback.format_exc()
         tmp = {}
@@ -65,6 +66,12 @@ def info():
         tmp["type"] = "fetch-video-info"
         tmp["message"] = str(error)
         lm.insertErrorLog(tmp)
+        
+        return jsonify({
+                "status":False,
+                "message":str(e),
+                "data":None
+            })
         
 
 @app.route("/redis",methods=["GET"])
@@ -127,6 +134,12 @@ def download(downloadType,quality,key):
         tmp["type"] = "fetch-download-video-url"
         tmp["message"] = str(error)
         lm.insertErrorLog(tmp)
+        
+        return jsonify({
+                "status":False,
+                "message":str(e),
+                "data":None
+            })
 
 
 @app.route("/download/thumbnail",methods=["GET"])
@@ -156,6 +169,12 @@ def downloadThumbnail():
         tmp["url"] = url
         tmp["message"] = str(error)
         lm.insertErrorLog(tmp)
+        
+        return jsonify({
+                "status":False,
+                "message":str(e),
+                "data":None
+            })
     
     
 @app.route('/stats')
@@ -195,3 +214,6 @@ def download_file(folderName,fileName):
         tmp["type"] = "download-video-file"
         tmp["message"] = str(error)
         lm.insertErrorLog(tmp)
+        
+        return redirect("https://ytshorts.savetube.me")
+        
