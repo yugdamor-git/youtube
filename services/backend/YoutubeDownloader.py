@@ -126,6 +126,13 @@ class YoutubeDownloader:
         elif "thumbnails" in info:
             if len(info["thumbnails"]) > 0:
                 thumbnail = info["thumbnails"][0]
+        default_selected = None
+        video_formats = self.extractVideoResolutions(info)
+        
+        for f in video_formats:
+            if f["url"] != None:
+                default_selected = f["height"]
+                break
         
         data = {
         'id': info['id'],
@@ -137,7 +144,8 @@ class YoutubeDownloader:
         "duration": info["duration"],
         "durationLabel":self.formatDuration(info["duration"]),
         "audio_formats": self.extractAudioResolutions(info),
-        "video_formats":self.extractVideoResolutions(info)
+        "video_formats":video_formats,
+        "default_selected":default_selected
         }
         
         self.redis.set(key,data)
