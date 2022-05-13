@@ -69,7 +69,7 @@ def info():
         
         return jsonify({
                 "status":False,
-                "message":str(e).split(":")[:2],
+                "message":str(e).split(": ")[:2],
                 "data":None
             })
         
@@ -137,7 +137,7 @@ def download(downloadType,quality,key):
         
         return jsonify({
                 "status":False,
-                "message":str(e).split(":")[:2],
+                "message":str(e).split(": ")[:2],
                 "data":None
             })
 
@@ -167,12 +167,12 @@ def downloadThumbnail():
         tmp = {}
         tmp["type"] = "download-thumbnail"
         tmp["url"] = url
-        tmp["message"] = str(error).split(":")[:2]
+        tmp["message"] = str(error)
         lm.insertErrorLog(tmp)
         
         return jsonify({
                 "status":False,
-                "message":str(e),
+                "message":str(e).split(": ")[:2],
                 "data":None
             })
     
