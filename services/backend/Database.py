@@ -10,3 +10,4 @@ class Database:
         self.requestCount = db["request-count"]
         self.storage = db["storage"]
         self.resolutionCount = db["resolution-count"]
+        self.errorLogs = db["errors"]
