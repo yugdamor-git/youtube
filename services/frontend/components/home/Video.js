@@ -104,6 +104,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
     }
     else
     {
+      setLoading(false);
       setVideo(res.data.downloadUrl)
       setShowDownload(true);
     }
