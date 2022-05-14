@@ -106,7 +106,9 @@ class YoutubeDownloader:
             'continue_dl': False,
             'skip_download': True,
             'noplaylist': True,
-            'proxy':'http://torproxy:8118'
+            # 'proxy':'http://torproxy:8118',
+            'cookiefile':os.environ.get("IP").split(".")[0] + ".txt"
+            
         }
         
         ydl = yt_dlp.YoutubeDL(options)
