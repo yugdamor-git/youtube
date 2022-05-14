@@ -152,7 +152,7 @@ const Video = ({currentVideoData,contentType,btnsp,showDownloadp}) => {
              
                 {contentType == "video" &&
                 currentVideoData.video_formats.map((item) => {
-                  if (item.height == currentVideoData.default_selected)
+                  if (item.default_selected == 1)
                   {
                     return <option selected key={item.height} value={item.height}>{item.label}</option> 
                   }

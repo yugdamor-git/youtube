@@ -135,6 +135,10 @@ class YoutubeDownloader:
         for f in video_formats:
             if f["url"] != None:
                 default_selected = f["height"]
+                tmp_copy = f.copy()
+                tmp_copy["label"] = "MP4 video"
+                tmp_copy["default_selected"] = 1
+                video_formats.insert(0,tmp_copy)
                 break
         
         data = {
@@ -215,6 +219,7 @@ class YoutubeDownloader:
             tmp = bucket[key][0]
             tmp["quality"] = key
             tmp["label"] = f'{key}p'
+            tmp["default_selected"] = 0
             
             main_bucket.append(tmp)
         return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])
@@ -240,6 +245,7 @@ class YoutubeDownloader:
             tmp = bucket[key][0]
             tmp["quality"] = key
             tmp["label"] = f'{key}p'
+            tmp["default_selected"] = 0
             
             main_bucket.append(tmp)
         return sorted(main_bucket,reverse=True,key=lambda i:i["quality"])    
@@ -264,6 +270,7 @@ class YoutubeDownloader:
             tmp = bucket[key][0]
             tmp["quality"] = key
             tmp["label"] = f'{key}p'
+            tmp["default_selected"] = 0
             tmp["url"] = None
             
             main_bucket.append(tmp)

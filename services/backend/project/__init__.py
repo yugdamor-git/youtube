@@ -69,10 +69,27 @@ def info():
         
         return jsonify({
                 "status":False,
-                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
+                "message":format_error_message(str(e)),
                 "data":None
             })
+
+
+def format_error_message(message):
+    error_msg = ""
+    
+    try:
+        tmp = str(message).split(": ")
         
+        if len(tmp) == 1:
+            error_msg = "ERROR Please check the video url and try downloading the video again."
+        elif len(tmp) < 3:
+            error_msg = " ".join(tmp)[:100]
+        else:
+            error_msg = " ".join(tmp[:3])[:100]
+        return error_msg
+    except:
+        return "ERROR Please check the video url and try downloading the video again."
+
 
 @app.route("/redis",methods=["GET"])
 def redis():
@@ -137,7 +154,7 @@ def download(downloadType,quality,key):
         
         return jsonify({
                 "status":False,
-                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
+                "message":format_error_message(str(e)),
                 "data":None
             })
 
@@ -172,7 +189,7 @@ def downloadThumbnail():
         
         return jsonify({
                 "status":False,
-                "message":" ".join(str(e).split(": ")[:2]).lower().title(),
+                "message":format_error_message(str(e)),
                 "data":None
             })
     
