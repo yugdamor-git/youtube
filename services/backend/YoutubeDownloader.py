@@ -400,7 +400,7 @@ class YoutubeDownloader:
              "downloaded":True
         }
         
-    def downloadImage(self,resolution,url,data):
+    def downloadImage(self,resolution,url,data,position):
         try:
             r = requests.get(url)
 
@@ -412,7 +412,8 @@ class YoutubeDownloader:
                 return {
                     "status":True,
                     "label":resolution,
-                    "downloadUrl":f'{self.host}{fileName}'
+                    "downloadUrl":f'{self.host}{fileName}',
+                    "position":position
                 }
 
             f = open(filePath, 'wb')
@@ -424,13 +425,15 @@ class YoutubeDownloader:
 
             return {"status":True,
                     "label":resolution,
-                    "downloadUrl":f'{self.host}{fileName}'
+                    "downloadUrl":f'{self.host}{fileName}',
+                    "position":position
                 }
         except Exception as e:
             print(f'error : {str(e)}')
             return {"status":False,
                     "label":resolution,
-                    "downloadUrl":f'{self.host}{fileName}'
+                    "downloadUrl":f'{self.host}{fileName}',
+                    "position":position
                 }
         
     def downloadThumbnailMultiThread(self,youtubeUrl):
@@ -447,9 +450,9 @@ class YoutubeDownloader:
         
         try:
             with ThreadPoolExecutor(max_workers=10) as executor:
-                for resolution in self.image_resolutions:
+                for position,resolution in enumerate(self.image_resolutions):
                     url = self.image_resolutions[resolution].format(id=data['id'])
-                    threads.append(executor.submit(self.downloadImage,resolution,url,data))
+                    threads.append(executor.submit(self.downloadImage,resolution,url,data,position))
                     
                 for task in as_completed(threads):
                     image = task.result()
@@ -459,7 +462,7 @@ class YoutubeDownloader:
         except Exception as e:
             print(f'error : {__file__} : {str(e)}')
         
-        return thumbnails
+        return sorted(thumbnails,key=lambda x:x["position"])
     
     def downloadThumbnail(self,youtubeUrl):
         
