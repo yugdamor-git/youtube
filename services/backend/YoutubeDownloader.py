@@ -108,7 +108,7 @@ class YoutubeDownloader:
             'skip_download': True,
             'noplaylist': True,
             # 'proxy':'http://torproxy:8118',
-            'cookiefile':f'{os.environ.get("IP").split(".")[0]}-{random.randint(0,1)}.txt'
+            'cookiefile':f'{os.environ.get("IP").split(".")[0]}--{random.randint(0,1)}.txt'
             
         }
         
