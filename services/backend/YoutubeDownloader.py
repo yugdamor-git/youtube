@@ -452,10 +452,9 @@ class YoutubeDownloader:
                     threads.append(executor.submit(self.downloadImage,resolution,url,data))
                     
                 for task in as_completed(threads):
-                    images = task.result()
-                    for image in images:
-                        if image["status"] == True:
-                            thumbnails.append(image)
+                    image = task.result()
+                    if image["status"] == True:
+                        thumbnails.append(image)
                         
         except Exception as e:
             print(f'error : {__file__} : {str(e)}')
