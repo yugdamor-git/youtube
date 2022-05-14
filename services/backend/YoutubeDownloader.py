@@ -426,7 +426,8 @@ class YoutubeDownloader:
                     "label":resolution,
                     "downloadUrl":f'{self.host}{fileName}'
                 }
-        except:
+        except Exception as e:
+            print(f'error : {str(e)}')
             return {"status":False,
                     "label":resolution,
                     "downloadUrl":f'{self.host}{fileName}'
