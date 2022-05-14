@@ -7,6 +7,7 @@ import yt_dlp
 import requests
 import youtube_dl
 import hashlib
+import random
 
 class YoutubeDownloader:
     def __init__(self):
@@ -107,7 +108,7 @@ class YoutubeDownloader:
             'skip_download': True,
             'noplaylist': True,
             # 'proxy':'http://torproxy:8118',
-            'cookiefile':os.environ.get("IP").split(".")[0] + ".txt"
+            'cookiefile':f'{os.environ.get("IP").split(".")[0]}-{random.randint(0,1)}.txt'
             
         }
         

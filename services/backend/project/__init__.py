@@ -83,9 +83,9 @@ def format_error_message(message):
         if len(tmp) == 1:
             error_msg = "ERROR Please check the video url and try downloading the video again."
         elif len(tmp) < 3:
-            error_msg = " ".join(tmp)[:100]
+            error_msg = " ".join(tmp)[:150]
         else:
-            error_msg = " ".join(tmp[:3])[:100]
+            error_msg = " ".join(tmp[:3])[:150]
         return error_msg
     except:
         return "ERROR Please check the video url and try downloading the video again."
