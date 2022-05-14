@@ -5,9 +5,9 @@ from redisHandler import redisHandler
 import math
 import yt_dlp
 import requests
-import youtube_dl
 import hashlib
 import random
+from concurrent.futures import ThreadPoolExecutor,as_completed
 
 class YoutubeDownloader:
     def __init__(self):
@@ -315,133 +315,6 @@ class YoutubeDownloader:
             main_bucket.append(availableResolutions[key])
         
         return sorted(main_bucket,reverse=True,key=lambda x:x["quality"])
-        
-        
-        for item in info["formats"]:
-            try:
-                width = item.get("width")
-                height = item.get("height")
-                
-                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
-                
-                if f'{res}p' in self.resolutionMap:
-                    rm = self.resolutionMap[f'{res}p']
-                    
-                    if item["url"]!=None and item["acodec"]!="none" and item["vcodec"]!="none" and item["ext"] == "mp4":
-                        
-                        tmp = {}
-                        tmp["quality"] = rm["height"]
-                        tmp["label"] = f'{res}p'
-                        tmp["url"] = item["url"]
-                        if not res in availableResolutions:
-                            availableResolutions[res]= tmp
-            except:
-                pass
-        
-        
-        for item in info["formats"]:
-            try:
-              
-                
-                res = int(item["format"].split("(")[-1].strip(")").split("p")[0])
-                
-                if f'{res}p' in self.resolutionMap:
-                    rm = self.resolutionMap[f'{res}p']
-                    height = rm["height"]
-                    tmp = {}
-                    tmp["quality"] = rm["height"]
-                    tmp["label"] = f'{res}p'
-                    tmp["url"] = None
-                    
-                    if not res in availableResolutions:
-                        if duration <= 20 * 60:
-                            availableResolutions[res]= tmp
-                        elif duration <= 30 * 60 and duration > 20 * 60:
-                            if height <= 1080:
-                                availableResolutions[res]= tmp
-                        elif duration <= 40 * 60 and duration < 30 * 60:
-                            if height <= 720:
-                                availableResolutions[res] = tmp
-                        else:
-                            continue
-            except:
-                pass
-            
-            # if height != None and width != None:
-            #     for res in self.resolutionMap:
-            #         r = self.resolutionMap[res]
-            #         if height == r["height"]:
-            #             tmp = {}
-            #             tmp["quality"] = r["height"]
-            #             tmp["label"] = res
-            #             tmp["url"] = None
-            #             if height not in availableResolutions:
-            #                 availableResolutions[height]= tmp
-        
-        
-        
-        # try:
-        #     directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res['acodec'] != 'none' and res["ext"] =="mp4"]
-
-        #     for res in directDownloadResolutions:
-        #         try:
-        #             height = int(res["format_note"].strip("p"))
-        #             tmp = {}
-        #             tmp["quality"] = height
-        #             tmp["label"] = f'{height}p'
-        #             tmp["url"] = res["url"]
-                    
-        #             tmp.update(self.extractFileSize(res))
-                    
-        #             if height not in availableResolutions:
-        #                 availableResolutions[height]= tmp
-        #         except:
-        #             pass
-            
-        #     directDownloadResolutions = [res for res in info['formats'] if res["vcodec"] != "none" and res["acodec"] != None]
-
-        #     for res in directDownloadResolutions:
-        #         try:
-        #             height = int(res["format_note"].strip("p"))
-        #             tmp = {}
-        #             tmp["quality"] = height
-        #             tmp["label"] = f'{height}p'
-        #             tmp["url"] = None
-        #             tmp.update(self.extractFileSize(res))
-                    
-        #             if height not in availableResolutions:
-                        
-        #                 if duration <= 20 * 60:
-        #                     availableResolutions[height]= tmp
-        #                 elif duration <= 30 * 60 and duration > 20 * 60:
-        #                     if height <= 1080:
-        #                         availableResolutions[height]= tmp
-        #                 elif duration <= 40 * 60 and duration < 30 * 60:
-        #                     if height <= 720:
-        #                         availableResolutions[height] = tmp
-        #                 else:
-        #                     continue
-        #                 availableResolutions[height]= tmp
-        #         except:
-        #             pass
-                    
-        # except Exception as e:
-        #     print(f'error -> {str(e)}')
-        
-        tmp = dict(sorted(availableResolutions.items(),reverse=True))
-        
-        final = []
-        
-        # default720 = tmp.get(1280,None)
-        # if default720 != None:
-        #     copyTmp = default720.copy()
-        #     copyTmp["label"] = "MP4 - 720p"
-        #     final.append(copyTmp)
-            
-        for item in tmp.items():
-            final.append(item[1])
-        
-        return final
     
     def extractAudioResolutions(self,info):
         availableBitrates = []
@@ -526,6 +399,67 @@ class YoutubeDownloader:
             "downloadUrl":f'{self.host}{fileName}',
              "downloaded":True
         }
+        
+    def downloadImage(self,resolution,url,data):
+        try:
+            r = requests.get(url)
+
+            fileName = f'{data["id"]}/{data["titleSlug"]}-{slugify(resolution)}-ytshorts.savetube.me.jpg'
+
+            filePath = self.mediaDir.joinpath(fileName)
+
+            if filePath.exists() == True:
+                return {
+                    "status":True,
+                    "label":resolution,
+                    "downloadUrl":f'{self.host}{fileName}'
+                }
+
+            f = open(filePath, 'wb')
+
+            for chunk in r.iter_content(chunk_size=512 * 1024): 
+                if chunk: 
+                    f.write(chunk)
+            f.close()
+
+            return {"status":True,
+                    "label":resolution,
+                    "downloadUrl":f'{self.host}{fileName}'
+                }
+        except:
+            return {"status":False,
+                    "label":resolution,
+                    "downloadUrl":f'{self.host}{fileName}'
+                }
+        
+    def downloadThumbnailMultiThread(self,youtubeUrl):
+        thumbnails = []
+        
+        threads = []
+        
+        data = self.fetchInfo(youtubeUrl)
+        
+        folder = self.mediaDir.joinpath(data["id"])
+        
+        if not folder.exists():
+            folder.mkdir()
+        
+        try:
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                for resolution in self.image_resolutions:
+                    url = self.image_resolutions[resolution].format(id=data['id'])
+                    threads.append(executor.submit(self.downloadImage,resolution,url,data))
+                    
+                for task in as_completed(threads):
+                    images = task.result()
+                    for image in images:
+                        if image["status"] == True:
+                            thumbnails.append(image)
+                        
+        except Exception as e:
+            print(f'error : {__file__} : {str(e)}')
+        
+        return thumbnails
     
     def downloadThumbnail(self,youtubeUrl):
         

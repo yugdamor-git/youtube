@@ -270,7 +270,7 @@ export default function ShortToMp3(props) {
         href="short-to-mp3"
       />
 
-<div className="py-[48px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
+<div className="py-[5px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
       <AdSense.Google
         className="mt-5"
         client="ca-pub-3476621303569503"
@@ -292,7 +292,7 @@ export default function ShortToMp3(props) {
         }}
         contentType="audio"
       />
-       <div className="py-[48px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
+       <div className="py-[5px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
 
      <AdSense.Google
       className="mt-5"

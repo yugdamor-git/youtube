@@ -171,14 +171,15 @@ def downloadThumbnail():
                 "data":None
             })
         
-        info = yd.downloadThumbnail(url) 
-        time.sleep(1)
+        info = yd.downloadThumbnailMultiThread(url)
+        
         lm.increaseRequestCount("download-thumbnail-request")
         return jsonify({
                 "status":True,
                 "message":"200",
                 "data":info
             })
+        
     except Exception as e:
         error  = traceback.format_exc()
         tmp = {}
