@@ -272,7 +272,7 @@ export default function ShortToMp3(props) {
 
 <div className="py-[5px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
       <AdSense.Google
-        className="mt-5"
+        className="my-2"
         client="ca-pub-3476621303569503"
         slot="5118507655"
         style={{ display: 'block' }}
@@ -295,7 +295,7 @@ export default function ShortToMp3(props) {
        <div className="py-[5px] text-center px-[15px] md:max-w-[960px] lg:max-w-[1140px]  md:mx-auto">
 
      <AdSense.Google
-      className="mt-5"
+      className="my-2"
       client="ca-pub-3476621303569503"
       slot="3627285369"
       style={{ display: 'block' }}

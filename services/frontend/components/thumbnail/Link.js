@@ -137,11 +137,11 @@ const Link = ({ data,contentType }) => {
     }
   };
   return (
-    <div className="text-center mt-12 mb-11 text-[#343a40] ">
+    <div className="text-center my-2 text-[#343a40] ">
       <h1 className="font-medium sm:text-[40px] text-2xl w-[20rem] sm:w-full sm:mb-2 m-auto">
         {data.title}
       </h1>
-      <p className=" mb-4 mx-[15px]">{data.p}</p>
+      <p className="mb-4 mx-[15px]">{data.p}</p>
 
       <div
         className="custom:w-5/6 w-[350px] sm:w-[650px] lg:w-[778px] sm:my-[28px]  mx-auto sm:flex sm:justify-center md-w[960px]"
