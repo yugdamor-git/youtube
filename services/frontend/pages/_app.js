@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import Footer from "../components/ui/Footer";
 import { useRouter } from "next/router";
 import Layout from "../components/layout";
+import Head from "next/head";
 
 
 
@@ -24,7 +25,10 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter()
   return (
     <>
-
+    
+    <Head>
+      <link rel="icon" type="image/x-icon" href="/og.jpg"/>
+    </Head>
 
    
 
