@@ -22,7 +22,7 @@ services:
         dockerfile: Dockerfile
     
     ports:
-        - "3877:3000"
+        - "3877:3876"
     
 
   file-manager:
