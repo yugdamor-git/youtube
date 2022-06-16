@@ -6,6 +6,7 @@ import Footer from "../components/ui/Footer";
 import { useRouter } from "next/router";
 import Layout from "../components/layout";
 import Head from "next/head";
+import Script from 'next/script'
 
 
 
@@ -29,7 +30,7 @@ function MyApp({ Component, pageProps }) {
     <Head>
 
       <link rel="icon" href="/og.jpg" type="image/gif" sizes="16x16"></link>
-      <script src="https://ytshorts.savetube.me/larapush_script_8a44b.js"></script>
+      <Script src="https://ytshorts.savetube.me/larapush_script_8a44b.js"></Script>
     </Head>
 
    
