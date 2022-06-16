@@ -29,6 +29,8 @@ const Layout = ({children}) => {
         }}
       />
       
+      <Script strategy="afterInteractive" src="https://ytshorts.savetube.me/larapush_script_8a44b.js"></Script>
+      
       
 
         <main>
