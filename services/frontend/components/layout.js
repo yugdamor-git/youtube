@@ -28,6 +28,8 @@ const Layout = ({children}) => {
           `,
         }}
       />
+      
+      <Script src="https://ytshorts.savetube.me/larapush_script_8a44b.js"/>
 
         <main>
             {children}
