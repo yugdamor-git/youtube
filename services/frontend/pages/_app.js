@@ -30,8 +30,9 @@ function MyApp({ Component, pageProps }) {
     <Head>
 
       <link rel="icon" href="/og.jpg" type="image/gif" sizes="16x16"></link>
-      <Script src="https://ytshorts.savetube.me/larapush_script_8a44b.js"></Script>
+      
     </Head>
+    <Script src="https://ytshorts.savetube.me/larapush_script_8a44b.js"></Script>
 
    
 
