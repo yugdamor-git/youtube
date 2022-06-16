@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
     
     <Head>
 
-      <link rel="icon" href="/og.jpg" type="image/gif" sizes="16x16"></link>
+      <link rel="icon" href="/og.jpg" type="image/jpg" sizes="16x16"></link>
       
     </Head>
 
