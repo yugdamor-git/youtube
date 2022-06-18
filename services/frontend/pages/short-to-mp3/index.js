@@ -263,7 +263,7 @@ export default function ShortToMp3(props) {
       </Head>
       <Navbar
         home={t("home:home_link")}
-        blog="/blog"
+        blog={t("home:blog_link")}
         contact={t("home:contact_link")}
         mp3={t("home:youtube_to_mp3")}
         thumbnail={t("home:youtube_thumbnail")}
