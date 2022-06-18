@@ -137,7 +137,7 @@ const Navbar = ({ home, blog, contact, mp3, thumbnail, href }) => {
           <div className="hidden w-full md:block md:w-auto " id="mobile-menu">
             <ul className="flex flex-col items-center mt-4 md:flex-row md:space-x-8 md:mt-0  md:text-sm md:font-medium ">
               <li className="block  pr-[12px]  text-white sm:text-[16px] sm:font-[400]">
-                <Link href="https://savetube.me/">{blog}</Link>
+                <Link href="https://ytshorts.savetube.me/blog">{blog}</Link>
               </li>
 
               <li className="block  pr-[12px]  text-white sm:text-[16px] sm:font-[400]">
