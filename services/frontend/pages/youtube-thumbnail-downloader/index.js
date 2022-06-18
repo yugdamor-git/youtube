@@ -251,7 +251,7 @@ export default function YoutubeThumbinalDownloader(props) {
       </Head>
       <Navbar
         home={t("home:home_link")}
-        blog={t("home:blog_link")}
+        blog="/blog"
         contact={t("home:contact_link")}
         mp3={t("home:youtube_to_mp3")}
         thumbnail={t("home:youtube_thumbnail")}
