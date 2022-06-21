@@ -8,6 +8,7 @@ services:
     #   - 5000
     ports:
       - 5555:5000
+    restart: always
 
     env_file:
       - ./.env.prod
@@ -21,6 +22,8 @@ services:
         context: ./services/frontend
         dockerfile: Dockerfile
     
+    restart: always
+    
     ports:
         - "3877:3876"
     
@@ -31,6 +34,8 @@ services:
 
     env_file:
       - ./.env.prod
+    
+    restart: always
     
     volumes:
       - ./media:/usr/src/app/media
