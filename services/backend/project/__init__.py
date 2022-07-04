@@ -50,13 +50,13 @@ def space():
     
     usage = shutil.disk_usage("/")
     
-    total = round(usage.total/(1024 * 1024 * 1024),2)
-    used = round(usage.used/(1024 * 1024 * 1024),2)
-    free = round(usage.free/(1024 * 1024 * 1024),2)
+    total = int(usage.total/(1024 * 1024 * 1024))
+    used = int(usage.used/(1024 * 1024 * 1024))
+    free = int(usage.free/(1024 * 1024 * 1024))
     
     send_alert = False
     alert_message = ""
-    percentage_used = round((used * 100)/total)
+    percentage_used = int((used * 100)/total)
     
     if percentage_used > alert_percentage:
         send_alert = True
@@ -99,15 +99,9 @@ def yt_dlp_status():
         
         download_duration = (t2 - t1).seconds
         
-        status = True
-        
-        if "message" in info:
-            if "error" in info["message"]:
-                status = False
-        
         return jsonify({
             
-            "status":status,
+            "status":True,
             "data":{
                 "fetch_duration":fetch_duration,
                 "download_duration":download_duration,
