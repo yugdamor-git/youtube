@@ -99,9 +99,15 @@ def yt_dlp_status():
         
         download_duration = (t2 - t1).seconds
         
+        status = True
+        
+        if "message" in info:
+            if "error" in info["message"]:
+                status = False
+        
         return jsonify({
             
-            "status":True,
+            "status":status,
             "data":{
                 "fetch_duration":fetch_duration,
                 "download_duration":download_duration,
