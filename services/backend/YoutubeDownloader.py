@@ -107,7 +107,6 @@ class YoutubeDownloader:
             'continue_dl': False,
             'skip_download': True,
             'noplaylist': True,
-            # 'proxy':'http://torproxy:8118',
             'cookiefile':f'{os.environ.get("IP").split(".")[0]}--{random.randint(0,1)}.txt'
             
         }
@@ -160,8 +159,6 @@ class YoutubeDownloader:
         
         data["fromCache"] = False
         
-        
-        
         return data
     
     def convert_size(self,size_bytes):
@@ -195,6 +192,7 @@ class YoutubeDownloader:
             }
         else:
             return self.convert_size(int(float(filesize)))
+        
     def generateHash(self,value):
         sha1 = hashlib.sha1()
         sha1.update(str(value).encode("utf-8"))

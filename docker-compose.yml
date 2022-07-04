@@ -4,10 +4,9 @@ services:
   backend-node:
     build: ./services/backend
     command: gunicorn --bind 0.0.0.0:5000 manage:app
-    # expose:
-    #   - 5000
     ports:
       - 5555:5000
+
     restart: always
 
     env_file:
@@ -40,46 +39,10 @@ services:
     volumes:
       - ./media:/usr/src/app/media
 
-  backend-manager:
-    build: ./services/backend
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
-    # expose:
-    #   - 5000
-    ports:
-      - 5555:5000
-
-    env_file:
-      - ./.env.prod
-    
-    volumes:
-      - ./media:/usr/src/app/media
-
-
-  nginx-manager:
-    build:
-      context: ./services/nginx
-      dockerfile: Dockerfile.manager
-
-    ports:
-      - 1337:80
-    
-    volumes:
-      - ./media:/home/app/web/media
-  
-  nginx-node:
-    build:
-      context: ./services/nginx
-      dockerfile: Dockerfile.node
-    
-    ports:
-      - 80:80
-    
-    volumes:
-      - ./media:/home/app/web/media
-
   redis-manager:
     image: redis:6.2-alpine
     hostname: redis
+    restart: always
     volumes:
       - ./services/redis/data:/data
     ports:
@@ -88,44 +51,6 @@ services:
 
     env_file:
       - ./.env.prod
-  
-  amplify:
-    image: "nginxinc/amplify-agent"
-    environment:
-      - API_KEY=540b099db29073cd8ed91f97c0078087
-      - AMPLIFY_IMAGENAME=youtube
-  
-  memcached:
-    container_name: memcached
-    
-    image: memcached:latest
-    
-    restart: always
-    
-    ports:
-        - 11211
-  
-  letsencrypt:
-    image: linuxserver/letsencrypt
-    container_name: letsencrypt
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - URL=${IP}
-      - SUBDOMAINS=wildcard,
-      - VALIDATION=dns
-      - DNSPLUGIN=cloudflare
-      - DHLEVEL=4096
-    volumes:
-      - ./services/nginx/config:/config
-    restart: unless-stopped
-  
-  torproxy:
-    image: dperson/torproxy
-    ports:
-      - 8118:8118
-      - 9050-9050
 
 
 

@@ -14,6 +14,8 @@ import json
 
 from LogManager import LogManager
 
+import shutil
+
 lm = LogManager()
 
 yd = YoutubeDownloader()
@@ -28,6 +30,58 @@ class DateTimeEncoder(JSONEncoder):
         def default(self, obj):
             if isinstance(obj, (datetime.date, datetime.datetime)):
                 return obj.isoformat()
+
+
+
+@app.route("/alert/ping")
+def ping():
+    return jsonify(
+        dns=os.environ.get("IP"),
+        status=True
+    )
+
+@app.route("/alert/space")
+def space():
+    
+    default_alert_percentage = 90
+    
+    alert_percentage = request.args.get("alert_percentage",None)
+    
+    if alert_percentage == None:
+        alert_percentage = default_alert_percentage
+    
+    usage = shutil.disk_usage("/")
+    
+    total = round(usage.total/(1024 * 1024 * 1024),2)
+    used = round(usage.used/(1024 * 1024 * 1024),2)
+    free = round(usage.free/(1024 * 1024 * 1024),2)
+    
+    send_alert = False
+    alert_message = ""
+    percentage_used = round((used * 100)/total)
+    
+    if percentage_used > alert_percentage:
+        send_alert = True
+    
+    dns = os.environ.get("IP")
+    
+    alert_message = f'{percentage_used}% space is used on server -> {dns}. please disable server in google sheet to stop receiving further emails regarding this.'
+    
+    return jsonify(
+        dns=dns,
+        total=total,
+        used=used,
+        free=free,
+        send_alert=send_alert,
+        percentage_used=percentage_used,
+        alert_message=alert_message
+    )
+
+@app.route("/alert/yt-dlp/status")
+def yt_dlp_status():
+    pass
+
+
 
 
 @app.route("/")
@@ -234,4 +288,3 @@ def download_file(folderName,fileName):
         lm.insertErrorLog(tmp)
         
         return redirect("https://ytshorts.savetube.me")
-        
