@@ -45,10 +45,8 @@ def space():
     
     default_alert_percentage = 90
     
-    alert_percentage = request.args.get("alert_percentage",None)
-    
-    if alert_percentage == None:
-        alert_percentage = default_alert_percentage
+    alert_percentage = int(request.args.get("alert_percentage",default_alert_percentage))
+        
     
     usage = shutil.disk_usage("/")
     
@@ -79,8 +77,42 @@ def space():
 
 @app.route("/alert/yt-dlp/status")
 def yt_dlp_status():
-    pass
-
+    try:
+        fetch_duration = None
+        download_duration = None
+        
+        url = request.args.get("url")
+        t1 = datetime.datetime.now()
+        info = yd.fetchInfo(url)
+        t2 = datetime.datetime.now()
+        
+        fetch_duration = (t2 - t1).seconds
+        
+        key = info["key"]
+        quality = info["video_formats"][1]["quality"]
+        
+        t1 = datetime.datetime.now()
+        info = yd.downloadVideo(key,quality)
+        t2 = datetime.datetime.now()
+        
+        download_url = info["downloadUrl"]
+        
+        download_duration = (t2 - t1).seconds
+        
+        return jsonify({
+            
+            "status":True,
+            "data":{
+                "fetch_duration":fetch_duration,
+                "download_duration":download_duration,
+                "download_url":download_url
+            }
+        })
+    except Exception as e:
+        return jsonify({
+            "status":False,
+            "message":f'error : {str(e)}'
+        })
 
 
 
