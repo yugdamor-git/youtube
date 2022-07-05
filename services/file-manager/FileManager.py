@@ -15,7 +15,7 @@ class FileManager:
         
         self.mediaDir = self.cwd.joinpath("media")
 
-        deleteAfter = 30
+        deleteAfter = 20
         
         self.deleteAfter = deleteAfter * 60
         
